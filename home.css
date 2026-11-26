@@ -1,0 +1,815 @@
+/* Redmic's home page. The other pages use style.css; this page stands alone.
+   The colours are the app's (MurmurBrand's tokens): a white canvas, ink, greys, and one red, which
+   belongs to the open microphone and to the logo (its dot and the r, e and c of "redmic"). The page
+   opens and closes on black, where that red glows like a recording light, and is white in between.
+   The type is the system font, as in the app.
+
+   Two ways to show the page:
+   - As it is written here first: every section laid out in the flow, finished. This is what a
+     browser without scripts, a small or slow device, or someone who asked for less motion sees.
+   - `html.scrub` (set by home.js): the scenes marked .scene become tall, their .stage sticks to the
+     viewport, and home.js moves their parts as the page scrolls. */
+
+:root {
+  --canvas: #ffffff;
+  --fill: #f4f4f4;
+  --line: #e5e5e5;
+  --ink: #0d0d0d;
+  --second: #5d5d5d;
+  --third: #6b6b6b;
+  --faint: #c9c9c9;
+  --live: #d92d20;
+  --night: #000000;
+  --night-fill: #1c1c1e;
+  --night-line: #2c2c2e;
+  --night-ink: #ffffff;
+  --night-second: #a1a1a6;
+  --night-third: #86868b;
+  --night-live: #ff5247;
+
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --nav-h: 52px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --wide: 1120px;
+  --pw: min(74vw, 300px); /* a phone's width; each place sets its own */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+  overflow-x: clip;
+  background: var(--canvas);
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--canvas);
+  color: var(--ink);
+  font: 400 1.0625rem/1.5 var(--font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, p, ul, ol, figure, blockquote, table { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-underline-offset: 3px; }
+button { font: inherit; color: inherit; }
+sup { font-size: 0.6em; line-height: 0; vertical-align: super; }
+sup a { text-decoration: none; padding: 0 1px; }
+/* Small links take a tap or a click a little beyond their letters. */
+sup a, .nav__brand, .nav__links a, .final__foot nav a { position: relative; }
+sup a::after, .nav__brand::after, .nav__links a::after, .final__foot nav a::after { content: ""; position: absolute; inset: -12px -8px; }
+
+/* The focus ring is the colour that shows on the surface around the control (a filled button's own
+   colour is that surface's, and would not show). */
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+.hero :focus-visible, .final :focus-visible, [data-nav="dark"] .nav :focus-visible,
+.deck__card :focus-visible, .plans td:last-child :focus-visible { outline-color: var(--night-ink); }
+
+.sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.nowrap { white-space: nowrap; }
+.center { text-align: center; }
+
+.skip {
+  position: fixed; left: 12px; top: -80px; z-index: 100;
+  padding: 10px 16px; border-radius: 999px; background: var(--canvas); color: var(--ink); font-weight: 600;
+}
+.skip:focus { top: 10px; }
+.skip:focus-visible { outline-color: var(--live); }
+
+/* ── Type ─────────────────────────────────────────────────────────────────────────────────────── */
+
+h1 {
+  font-size: clamp(2.75rem, 10.5vw, 6rem);
+  line-height: 1.02; font-weight: 700; letter-spacing: -0.04em; word-spacing: 0.06em; text-wrap: balance;
+}
+h2, .h2 {
+  font-size: clamp(2.125rem, 6.2vw, 4rem);
+  line-height: 1.05; font-weight: 700; letter-spacing: -0.035em; word-spacing: 0.06em; text-wrap: balance;
+}
+h3 { font-size: clamp(1.25rem, 2.1vw, 1.5rem); line-height: 1.2; font-weight: 650; letter-spacing: -0.02em; }
+.lead {
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  line-height: 1.33; letter-spacing: -0.012em; color: var(--second); text-wrap: balance;
+}
+.eyebrow { font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.01em; }
+.kicker { font-size: clamp(1.25rem, 2.1vw, 1.5rem); line-height: 1.2; font-weight: 650; letter-spacing: -0.02em; }
+.tag { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em; color: var(--third); }
+.caption { font-size: 0.875rem; line-height: 1.45; color: var(--third); }
+.fine { font-size: 0.8125rem; line-height: 1.45; }
+
+/* ── Buttons and store badges ─────────────────────────────────────────────────────────────────── */
+
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 8px 20px; border-radius: 999px;
+  background: var(--ink); color: var(--canvas); font-weight: 600; font-size: 0.9375rem; text-decoration: none;
+  transition: opacity 0.12s;
+}
+.button:active { opacity: 0.75; }
+.button--small { min-height: 40px; padding: 4px 14px; font-size: 0.875rem; }
+
+/* The stores' own artwork, at one height, with their clear space around it. */
+.stores { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.store { display: block; border-radius: 9px; }
+.store img { height: 48px; width: auto; }
+
+.chip {
+  min-height: 40px; padding: 6px 16px; border-radius: 999px; border: 1.5px solid var(--ink);
+  background: none; color: var(--ink); font-weight: 600; font-size: 0.9375rem; cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--canvas); }
+@media (forced-colors: active) {
+  .chip[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; }
+}
+
+/* ── Layout helpers ───────────────────────────────────────────────────────────────────────────── */
+
+.wrap { max-width: var(--wide); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+.wrap--narrow { max-width: 800px; }
+.head { max-width: 52rem; margin: 0 auto clamp(40px, 6vw, 72px); text-align: center; }
+.head .lead { max-width: 34rem; margin: 14px auto 0; }
+.head--left { margin-left: 0; text-align: left; }
+.head--left .lead { margin-left: 0; }
+main > section { position: relative; background: var(--canvas); } /* each section paints itself: the page's background is the bar's */
+
+/* Parts that come in as they are reached. home.js sets .reveals once it watches for them, and adds
+   .in to each; without it they are simply there. */
+.reveals [data-reveal] {
+  opacity: 0; transform: translate3d(0, 24px, 0);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.reveals [data-reveal].in { opacity: 1; transform: none; }
+
+/* ── The bar ──────────────────────────────────────────────────────────────────────────────────── */
+
+.nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px));
+  display: flex; align-items: center; gap: 24px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+}
+.nav__brand { display: inline-flex; font-size: 20px; line-height: 1; color: inherit; text-decoration: none; border-radius: 6px; }
+.logo { display: block; flex: none; }
+.logo .red { fill: var(--live); }
+.nav__links { display: none; margin-left: auto; gap: clamp(16px, 2.4vw, 32px); font-size: 0.875rem; }
+.nav__links a { text-decoration: none; opacity: 0.82; }
+.nav__links a:hover { opacity: 1; }
+.nav__get { margin-left: auto; }
+@media (min-width: 760px) {
+  .nav__links { display: flex; }
+  .nav__get { margin-left: 0; }
+}
+/* Over the black sections. The page's own background follows, since a phone's browser colours its
+   bars from it (and it is what shows when the page is pulled past its top or bottom). */
+html[data-nav="dark"], html[data-nav="dark"] body { background: var(--night); }
+[data-nav="dark"] .nav {
+  color: var(--night-ink); background: rgba(0, 0, 0, 0.55); border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+[data-nav="dark"] .nav .logo .red { fill: var(--night-live); }
+[data-nav="dark"] .nav__get { background: var(--night-ink); color: var(--ink); }
+/* Without the script nothing changes the bar's colours as the page scrolls: it stays over the black opening. */
+html:not(.js) .nav { position: absolute; }
+
+/* A way to the stores that stays in reach on a phone, once the opening has passed. */
+.getbar {
+  position: fixed; z-index: 40; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  transform: translate3d(-50%, 150%, 0); opacity: 0;
+  min-height: 48px; padding: 8px 26px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  transition: transform 0.45s var(--ease), opacity 0.3s;
+}
+.getbar.is-up { transform: translate3d(-50%, 0, 0); opacity: 1; }
+.getbar:not(.is-up) { visibility: hidden; transition: transform 0.45s var(--ease), opacity 0.3s, visibility 0s 0.45s; } /* and out of the Tab order */
+@media (min-width: 760px) { .getbar { display: none !important; } }
+
+/* ── The phone ────────────────────────────────────────────────────────────────────────────────── */
+/* A phone of no particular make. Its screen is a real capture, 1206 × 2622; inside the screen 1em is
+   one point of that capture, so what is drawn over it (the rings) is sized as the app sizes it. */
+
+.phone {
+  --ph: calc(var(--pw) * 2.092);
+  --bezel: calc(var(--pw) * 0.035);
+  --corner: calc(var(--pw) * 0.165);
+  --depth: calc(var(--pw) * 0.085);
+  position: relative; width: var(--pw); height: var(--ph); flex: none;
+}
+.phone__front {
+  position: absolute; inset: 0; border-radius: var(--corner); overflow: hidden;
+  background: #0b0b0c;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 calc(var(--bezel) * 0.4) #1b1b1e;
+}
+.phone__screen {
+  position: absolute; inset: var(--bezel); overflow: hidden;
+  border-radius: calc(var(--corner) - var(--bezel));
+  background: var(--canvas);
+  font-size: calc((var(--pw) - 2 * var(--bezel)) / 402);
+}
+.phone__screen img { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* An Android phone: a 9:16 screen and squarer corners. */
+.phone--android { --ph: calc(var(--pw) * 1.7233); --corner: calc(var(--pw) * 0.115); }
+
+/* In the sections: standing on the page, with a soft shadow. */
+.phone--flat .phone__front {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 calc(var(--bezel) * 0.4) #1b1b1e,
+    0 calc(var(--pw) * 0.12) calc(var(--pw) * 0.22) calc(var(--pw) * -0.1) rgba(0, 0, 0, 0.35),
+    0 calc(var(--pw) * 0.02) calc(var(--pw) * 0.05) rgba(0, 0, 0, 0.12);
+}
+
+/* In the opening: a solid body that can turn. The faces of its rim are thin strips, and its round
+   corners are small quarter discs at three depths, so nothing as large as the phone is drawn twice. */
+.phone__tilt { position: absolute; inset: 0; }
+.phone__rim, .phone__corner, .phone__back, .phone__glare, .phone__shadow { display: none; }
+.scrub .phone--solid { perspective: 1500px; }
+.scrub .phone--solid .phone__tilt { transform-style: preserve-3d; }
+.scrub .phone--solid .phone__front { transform: translateZ(calc(var(--depth) / 2)); }
+.scrub .phone--solid .phone__back {
+  display: block; position: absolute; inset: 0; border-radius: var(--corner);
+  background: #141416; transform: translateZ(calc(var(--depth) / -2));
+}
+.scrub .phone--solid .phone__rim { display: block; position: absolute; }
+.scrub .phone--solid .phone__rim--top,
+.scrub .phone--solid .phone__rim--bottom {
+  left: var(--corner); right: var(--corner); height: var(--depth);
+  background: linear-gradient(90deg, #2b2b2f, #5a5a60 16%, #303034 50%, #57575d 84%, #2b2b2f);
+}
+.scrub .phone--solid .phone__rim--top { top: calc(var(--depth) / -2); transform: rotateX(90deg); }
+.scrub .phone--solid .phone__rim--bottom {
+  left: calc(var(--corner) - 1px); right: calc(var(--corner) - 1px);
+  bottom: calc(var(--depth) / -2); transform: rotateX(-90deg);
+  background: linear-gradient(90deg, #2b2b2f 0 10%, #5f3a37 32%, #4a3231 50%, #5f3a37 68%, #2b2b2f 90% 100%);
+}
+.scrub .phone--solid .phone__rim--left,
+.scrub .phone--solid .phone__rim--right {
+  top: var(--corner); bottom: var(--corner); width: var(--depth);
+  background: linear-gradient(180deg, #2b2b2f, #5a5a60 10%, #303034 50%, #4c4c52 90%, #2b2b2f);
+}
+.scrub .phone--solid .phone__rim--left { left: calc(var(--depth) / -2); transform: rotateY(-90deg); }
+.scrub .phone--solid .phone__rim--right { right: calc(var(--depth) / -2); transform: rotateY(90deg); }
+.scrub .phone--solid .phone__corner {
+  display: block; position: absolute; width: var(--corner); height: var(--corner);
+  background: #2b2b2f; transform: translateZ(calc(var(--z) * var(--depth)));
+}
+.phone__corner--tl { top: 0; left: 0; border-top-left-radius: 100%; }
+.phone__corner--tr { top: 0; right: 0; border-top-right-radius: 100%; }
+.phone__corner--bl { bottom: 0; left: 0; border-bottom-left-radius: 100%; }
+.phone__corner--br { bottom: 0; right: 0; border-bottom-right-radius: 100%; }
+/* A streak of light across the glass; home.js slides it as the phone turns. */
+.scrub .phone--solid .phone__glare {
+  display: block; position: absolute; inset: 0 -100%; pointer-events: none;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 0.1) 49%, rgba(255, 255, 255, 0) 57%);
+}
+/* The recording light's glow on the floor under it. */
+.scrub .phone--solid .phone__shadow {
+  display: block; position: absolute; left: -30%; right: -30%; bottom: -16%; height: 26%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 82, 71, 0.34), rgba(255, 82, 71, 0));
+}
+
+/* The screens of the demo, one over the other: at rest, listening, the text in. */
+.phone__screen[data-frame] img { transition: opacity 0.32s var(--ease); }
+.phone__screen[data-frame] img:nth-of-type(n + 2) { opacity: 0; }
+.phone__screen[data-frame="1"] img:nth-of-type(2),
+.phone__screen[data-frame="2"] img:nth-of-type(3) { opacity: 1; }
+html:not(.scrub) .phone__screen[data-frame] img:nth-of-type(3) { opacity: 1; }
+
+/* The echo rings around the mic key, in its own shape. home.js gives each ring how far it stands
+   out (--spread, in points) and how strong it is (--o), from the app's own numbers. */
+.rings { position: absolute; pointer-events: none; opacity: 0; transition: opacity 0.25s; }
+.phone__screen[data-frame="1"] .rings { opacity: 1; }
+html:not(.scrub) .rings { display: none; }
+.rings i {
+  position: absolute; inset: calc(var(--spread, 0) * -1em);
+  border: 2em solid var(--live); border-radius: 999em; opacity: var(--o, 0);
+}
+.probe { position: absolute; visibility: hidden; pointer-events: none; }
+
+/* ── Scenes ───────────────────────────────────────────────────────────────────────────────────── */
+
+.stage { position: relative; }
+/* The opening is pinned wherever the scenes are on. The page's head sets .scrub before the first
+   paint, so its length is here too (the same numbers as data-len on the section, which home.js
+   reads); home.js gives the other two scenes theirs (--len), where their stage has room for them. */
+.scrub .hero { height: 360svh; }
+@media (min-width: 900px) { .scrub .hero { height: 440svh; } }
+.scrub .scene[style*="--len"] { height: calc(var(--len) * 1svh); }
+.scrub .hero > .stage, .scrub .scene[style*="--len"] > .stage {
+  position: sticky; top: 0; height: 100svh; overflow: clip;
+}
+
+/* ── 1–3. The opening ─────────────────────────────────────────────────────────────────────────── */
+
+.hero { background: var(--night); color: var(--night-ink); }
+.hero .lead { color: var(--night-second); }
+.hero .fine { color: var(--night-third); }
+.hero .tag { color: var(--night-second); }
+.hero .eyebrow { color: var(--night-second); }
+.hero .phone { --pw: min(70vw, 300px); }
+
+/* Without the scroll scenes: one tall black section, read from top to bottom. */
+.hero .stage {
+  display: flex; flex-direction: column; align-items: center; gap: clamp(28px, 6vw, 56px);
+  padding: calc(var(--nav-h) + clamp(36px, 8vw, 88px)) var(--gutter) clamp(56px, 9vw, 104px);
+  text-align: center;
+}
+.hero__glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 46% at 50% 100%, rgba(255, 82, 71, 0.3), rgba(255, 82, 71, 0) 70%),
+    radial-gradient(34% 26% at 50% 96%, rgba(255, 82, 71, 0.34), rgba(255, 82, 71, 0) 72%);
+}
+.hero__plate { position: absolute; inset: 0; pointer-events: none; }
+.hero__plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__plate .slot-hero-plate-tall { display: none; }
+@media (max-aspect-ratio: 4/5) {
+  .hero__plate .slot-hero-plate-tall { display: block; }
+  .hero__plate .slot-hero-plate-tall ~ .slot-hero-plate-wide { display: none; } /* the tall one comes first in the page */
+}
+body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
+
+.hero__copy { position: relative; order: 1; display: grid; justify-items: center; gap: 16px; max-width: 60rem; }
+.hero__copy .lead { max-width: 24em; }
+.hero__copy .stores { margin-top: 10px; }
+.hero__copy .fine { max-width: 30em; }
+.hero__device { position: relative; order: 2; }
+.hero__claim { position: relative; order: 3; display: grid; justify-items: center; gap: 14px; max-width: 46rem; }
+.hero__say { position: relative; order: 4; display: grid; gap: 8px; max-width: 30rem; }
+.say__line { font-size: clamp(1.125rem, 2.2vw, 1.5rem); line-height: 1.3; letter-spacing: -0.012em; }
+.hero__writes { font-size: clamp(1.125rem, 2.2vw, 1.5rem); line-height: 1.3; letter-spacing: -0.012em; }
+.hero__writes .tag { display: block; margin: 10px 0 8px; }
+.hero__steps, .hero__curtain { display: none; }
+
+/* With them: everything sits in one screen-high stage and takes its turn. */
+.scrub .hero .stage { display: block; padding: 0; }
+/* The layers that lie over the words (the phone's box, the lines still to come) let a click through to the badges. */
+.scrub .hero__device, .scrub .hero__claim, .scrub .hero__say, .scrub .hero__steps { pointer-events: none; }
+/* The phone shows once home.js has put it in its place. */
+.scrub .hero__device { transition: opacity 0.45s var(--ease); }
+.scrub:not(.ready) .hero__device { opacity: 0; }
+.scrub .hero .phone {
+  --pw: min(70vw, 440px, calc((100svh - var(--nav-h) - 120px) / 2.092));
+}
+.scrub .hero__copy {
+  position: absolute; left: 50%; top: calc(var(--nav-h) + clamp(18px, 6svh, 72px));
+  width: min(100% - 2 * var(--gutter), 60rem); margin-left: calc(min(100% - 2 * var(--gutter), 60rem) / -2);
+  gap: clamp(8px, 1.8svh, 16px);
+}
+.scrub .hero__device {
+  position: absolute; left: 50%; top: 50%;
+  width: var(--dw); height: var(--dh); margin: calc(var(--dh) / -2) 0 0 calc(var(--dw) / -2);
+  --dw: min(70vw, 440px, calc((100svh - var(--nav-h) - 120px) / 2.092)); --dh: calc(var(--dw) * 2.092);
+}
+.scrub .hero__claim {
+  position: absolute; left: 50%; top: calc(var(--nav-h) + clamp(12px, 4.5svh, 52px));
+  width: min(100% - 2 * var(--gutter), 46rem); margin-left: calc(min(100% - 2 * var(--gutter), 46rem) / -2);
+  opacity: 0; text-align: center;
+}
+.scrub .hero__curtain .hero__claim { opacity: 1; }
+.scrub .hero__curtain .lead { color: var(--second); }
+.scrub .hero__curtain {
+  display: block; position: absolute; inset: 0; z-index: 5; visibility: hidden;
+  background: var(--canvas); color: var(--ink);
+}
+.scrub .hero__writes { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* What you say, beside the phone; on a phone, above it. */
+.scrub .hero__say {
+  position: absolute; left: var(--gutter); right: var(--gutter); top: calc(var(--nav-h) + clamp(6px, 1.6svh, 18px));
+  max-width: none; gap: 4px; text-align: center; opacity: 0;
+}
+.scrub .say__line { font-size: clamp(1rem, 4.4vw, 1.25rem); line-height: 1.28; }
+.scrub .say__line .w { display: inline-block; opacity: 0.16; transition: opacity 0.3s; }
+.scrub .say__line .w.on { opacity: 1; }
+/* "um" and "uh": red, and gone into the mic once the sentence is said; the line closes up after them. */
+.say__line .w--filler { margin-right: 0.26em; }
+.scrub .say__line .w--filler {
+  color: var(--night-live); max-width: 3em; white-space: nowrap;
+  transition: opacity 0.3s, transform 0.75s cubic-bezier(0.5, 0, 0.75, 0.3), max-width 0.5s var(--ease) 0.55s, margin 0.5s var(--ease) 0.55s;
+}
+.scrub .hero__say.is-clean .w--filler {
+  opacity: 0; max-width: 0; margin-right: 0; transform: translate3d(var(--dx, 0), var(--dy, 40px), 0) scale(0.2);
+  transition: opacity 0.45s 0.3s, transform 0.75s cubic-bezier(0.5, 0, 0.75, 0.3), max-width 0.5s var(--ease) 0.55s, margin 0.5s var(--ease) 0.55s;
+}
+
+/* What to do, like subtitles under the phone. */
+.scrub .hero__steps {
+  display: block; position: absolute; z-index: 3; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%); height: 40px; min-width: 9em;
+}
+.scrub .hero__steps li {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: 0 18px; white-space: nowrap;
+  border-radius: 999px; background: rgba(28, 28, 30, 0.92); color: var(--night-ink); font-weight: 600; font-size: 0.9375rem;
+  opacity: 0; transform: translate3d(0, 8px, 0); transition: opacity 0.3s, transform 0.3s var(--ease);
+}
+.scrub .hero .stage[data-step="1"] .hero__steps li:nth-child(1),
+.scrub .hero .stage[data-step="2"] .hero__steps li:nth-child(2),
+.scrub .hero .stage[data-step="3"] .hero__steps li:nth-child(3) { opacity: 1; transform: none; }
+
+@media (min-width: 900px) {
+  .scrub .hero__say {
+    left: auto; right: calc(50% + var(--side)); top: 50%; width: min(28vw, 22rem, calc(50vw - var(--side) - var(--gutter)));
+    transform: translateY(-50%); text-align: right; gap: 10px;
+    --side: calc(min(70vw, 440px, (100svh - var(--nav-h) - 120px) / 2.092) / 2 + clamp(28px, 4vw, 64px));
+  }
+  .scrub .say__line { font-size: clamp(1.25rem, 1.9vw, 1.75rem); }
+  .scrub .hero__steps {
+    left: calc(50% + var(--side)); bottom: auto; transform: none; height: 48px;
+    top: calc(50% + var(--nav-h) / 2 + min(70vw, 440px, (100svh - var(--nav-h) - 120px) / 2.092) * 0.284 - 24px); /* the mic key's line */
+    --side: calc(min(70vw, 440px, (100svh - var(--nav-h) - 120px) / 2.092) / 2 + clamp(28px, 4vw, 64px));
+  }
+  .scrub .hero__steps li {
+    inset: 0 auto 0 0; padding: 0; background: none; font-size: clamp(1.25rem, 1.9vw, 1.75rem); letter-spacing: -0.012em;
+  }
+}
+
+/* ── 4. The statement ─────────────────────────────────────────────────────────────────────────── */
+
+.statement { padding: clamp(56px, 9vw, 120px) var(--gutter) clamp(88px, 15vw, 190px); }
+.statement__text {
+  max-width: 19em; margin: 0 auto;
+  font-size: clamp(1.75rem, 4.6vw, 3.5rem); line-height: 1.12; font-weight: 650; letter-spacing: -0.03em; word-spacing: 0.05em;
+}
+/* With the scenes, it comes up into the lower half of the white while the opening's last lines are
+   still there (no empty screen after the turn), and shows once the white has covered the stage. */
+.scrub .statement { margin-top: -52svh; background: none; z-index: 6; }
+.scrub .statement__text { opacity: 0; transition: opacity 0.25s; }
+.scrub[data-nav="light"] .statement__text { opacity: 1; }
+.scrub .statement__text .sw { color: var(--faint); transition: color 0.3s; }
+.scrub .statement__text .sw.on { color: var(--ink); }
+
+/* A row of photographs, there only once they have been made. */
+.life { display: flex; gap: 16px; overflow-x: auto; scrollbar-width: none; background: var(--canvas);
+  padding: 0 max(var(--gutter), (100% - var(--wide)) / 2 + var(--gutter)) clamp(56px, 8vw, 110px); }
+.life:empty { display: none; }
+.life::-webkit-scrollbar { display: none; }
+.life img { flex: 1 0 min(82vw, 340px); width: 0; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 28px; }
+@media (min-width: 900px) { .life img { flex: 1 1 0; } }
+
+/* ── 5. In short ──────────────────────────────────────────────────────────────────────────────── */
+
+.short { padding-bottom: clamp(72px, 11vw, 150px); }
+.short .kicker { max-width: var(--wide); margin: 0 auto 22px; padding: 0 var(--gutter); }
+.short__row {
+  display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding: 4px max(var(--gutter), (100% - var(--wide)) / 2 + var(--gutter)) 12px;
+  scroll-padding-left: max(var(--gutter), (100% - var(--wide)) / 2 + var(--gutter));
+  -webkit-overflow-scrolling: touch;
+}
+.short__row::-webkit-scrollbar { display: none; }
+.card {
+  flex: 0 0 min(78vw, 300px); scroll-snap-align: start;
+  display: flex; flex-direction: column; gap: 10px; min-height: 300px; padding: 28px;
+  border-radius: 28px; background: var(--fill);
+}
+.card__icon { width: 48px; height: 48px; margin-bottom: auto; }
+.card__icon svg { width: 48px; height: 48px; fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.card__icon svg .live, .final__mark svg .live { fill: var(--live); stroke: none; }
+.card__icon img { width: 64px; height: 64px; object-fit: contain; margin: -8px; }
+.card__icon img ~ svg { display: none; } /* a made icon comes first, and replaces the drawn one */
+.card h3 { margin-top: 26px; }
+.card p { color: var(--second); text-wrap: pretty; }
+.card > a { margin-top: 4px; font-weight: 600; text-decoration: none; }
+.card > a:hover { text-decoration: underline; }
+@media (min-width: 900px) {
+  /* Room for all six: two rows of three, and nothing to scroll (a mouse wheel can't scroll a row sideways). */
+  .short__row {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; scroll-snap-type: none;
+    max-width: var(--wide); margin: 0 auto; padding: 4px var(--gutter) 12px;
+  }
+  .card { min-height: 264px; }
+}
+
+/* ── 6. Modes ─────────────────────────────────────────────────────────────────────────────────── */
+
+.modes { background: var(--canvas); }
+.modes .stage { padding: clamp(72px, 10vw, 140px) 0; }
+.modes__head { max-width: 56rem; margin: 0 auto clamp(32px, 5vw, 56px); padding: 0 var(--gutter); text-align: center; }
+.modes__head .lead { max-width: 34rem; margin: 14px auto 0; }
+.modes__body { max-width: var(--wide); margin: 0 auto; display: grid; gap: 20px; }
+.spoken { margin: 0 var(--gutter); padding: 20px 22px; border-radius: 22px; background: var(--fill); }
+.spoken blockquote { margin-top: 6px; font-size: clamp(1.0625rem, 1.8vw, 1.375rem); line-height: 1.35; letter-spacing: -0.012em; color: var(--second); }
+.modes__tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px var(--gutter); }
+.modes__tabs::-webkit-scrollbar { display: none; }
+.modes__tabs .chip { flex: none; }
+@media (max-width: 430px), (min-width: 900px) and (max-width: 1099px) {
+  .modes__tabs { gap: 6px; }
+  .modes__tabs .chip { padding: 6px 10px; font-size: 0.875rem; }
+}
+/* The four answers: a row to swipe on a phone, a pile to leaf through on a wide screen. */
+.deck {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding: 4px var(--gutter) 8px; scroll-padding-left: var(--gutter);
+}
+.deck::-webkit-scrollbar { display: none; }
+.deck__card {
+  flex: 0 0 min(84vw, 420px); scroll-snap-align: start; min-height: 268px; padding: 26px;
+  border-radius: 28px; background: var(--ink); color: var(--canvas);
+}
+.deck__name { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; }
+.deck__hint { margin-top: 2px; font-size: 0.9375rem; color: var(--night-second); }
+.deck__text { margin-top: 22px; font-size: clamp(1.1875rem, 2.1vw, 1.625rem); line-height: 1.3; letter-spacing: -0.015em; }
+.modes .caption { padding: 0 var(--gutter); }
+/* The keyboard's own style menu, cut out of a capture. */
+.modes__menu { display: grid; gap: 10px; padding: 8px var(--gutter) 0; max-width: 460px; }
+.slice { display: block; width: 100%; border-radius: 20px; background-repeat: no-repeat; box-shadow: 0 0 0 1px var(--line); }
+
+@media (min-width: 900px) {
+  .modes__body { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-rows: auto auto auto 1fr; column-gap: clamp(32px, 5vw, 72px); padding: 0 var(--gutter); align-items: start; }
+  .spoken { grid-column: 1; margin: 0; padding: 24px 26px; }
+  .modes__tabs { grid-column: 1; padding: 2px 0; flex-wrap: wrap; }
+  .modes .caption { grid-column: 1; padding: 0; max-width: 26em; }
+  .modes__menu { grid-column: 1; padding: 6px 0 0; max-width: 340px; }
+
+  .deck { grid-column: 2; grid-row: 1 / span 4; overflow: visible; padding: 0; display: grid; align-self: start; perspective: 1400px; }
+  /* The card in front is read; the ones behind it show only their top edges, each a shade lighter. */
+  .deck__card {
+    grid-area: 1 / 1; min-height: 340px; padding: 34px;
+    --d: 0; transform-origin: 50% 0; z-index: calc(10 - var(--d));
+    transform: translate3d(0, calc(var(--d) * -26px), calc(var(--d) * -120px));
+    transition: transform 0.7s var(--ease), opacity 0.5s, background-color 0.5s;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.45);
+  }
+  /* Where a browser can't mix colours, every card keeps the ink it has above. */
+  @supports (background: color-mix(in srgb, red, blue)) {
+    .deck__card { background: color-mix(in srgb, var(--ink), var(--canvas) calc(var(--d) * 13%)); }
+  }
+  .deck__card > * { opacity: calc(1 - var(--d)); transition: opacity 0.4s; }
+  .deck__card.is-gone { z-index: 11; transform: translate3d(0, -40px, 60px) rotateX(-12deg); opacity: 0; pointer-events: none; }
+  .modes__head .lead { max-width: 44rem; }
+  .deck__card:nth-child(1) { --d: 0; } .deck__card:nth-child(2) { --d: 1; } .deck__card:nth-child(3) { --d: 2; } .deck__card:nth-child(4) { --d: 3; }
+  /* Without the script: the four side by side, all readable. */
+  html:not(.js) .deck { grid-template-columns: 1fr 1fr; gap: 14px; perspective: none; }
+  html:not(.js) .deck__card { grid-area: auto; transform: none; opacity: 1; min-height: 0; background: var(--ink); }
+  html:not(.js) .deck__card > * { opacity: 1; }
+  /* Pinned (home.js gives the section its length only where the stage holds all of this). */
+  .scrub .modes[style*="--len"] .stage { display: grid; align-content: center; padding: var(--nav-h) 0 0; }
+  .scrub .modes[style*="--len"] .modes__head { margin-bottom: calc(clamp(12px, 3svh, 48px) + 28px); } /* the pile's back cards stand 27 px above it */
+  @media (max-height: 859px) { .scrub .modes[style*="--len"] .modes__menu { display: none; } } /* no room for it in a pinned stage this low */
+}
+html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
+
+/* ── 7. Translate ─────────────────────────────────────────────────────────────────────────────── */
+
+.translate { padding: clamp(72px, 10vw, 140px) 0; background: var(--fill); }
+.translate__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(40px, 6vw, 72px); align-items: center; }
+.translate__copy { display: grid; gap: 16px; justify-items: start; container-type: inline-size; }
+.translate__copy > * { min-width: 0; max-width: 100%; }
+.stat {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.12em; margin-top: 12px;
+  /* As large as its column allows on one line (the three are 3.33em wide); only very large text makes it wrap. */
+  font-size: clamp(4.5rem, 21vw, 10.5rem); font-size: clamp(4.5rem, 28cqi, 10.5rem); line-height: 0.9; font-weight: 700; letter-spacing: -0.055em;
+}
+@supports not (width: 1cqi) { .stat { flex-wrap: nowrap; } }
+.stat i { font-style: normal; font-weight: 300; color: var(--faint); letter-spacing: 0; }
+.stat__caption { font-size: 0.9375rem; color: var(--second); }
+.translate .body { max-width: 30em; color: var(--second); }
+.flip { width: 100%; max-width: 30em; margin-top: 8px; }
+.flip__inner { display: grid; gap: 10px; }
+.flip__face { padding: 20px 22px; border-radius: 22px; background: var(--canvas); }
+.flip__face p + p { margin-top: 6px; font-size: 1.1875rem; line-height: 1.3; letter-spacing: -0.012em; }
+.flip__face--back { background: var(--ink); color: var(--canvas); }
+.flip__face--back .tag { color: var(--night-second); }
+/* Turning: the two faces back to back, one sentence becoming the other. */
+.scrub .flip { perspective: 1100px; }
+.scrub .flip__inner { gap: 0; transform-style: preserve-3d; transition: transform 0.9s var(--ease); }
+.scrub .flip__face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.scrub .flip__face--back { transform: rotateX(180deg); }
+.scrub .flip.is-turned .flip__inner { transform: rotateX(-180deg); }
+.translate__device { display: grid; justify-items: center; gap: 22px; }
+.translate__device .phone { --pw: min(66vw, 300px); }
+.translate__device .caption { max-width: 24em; text-align: center; }
+.translate__made:empty { display: none; }
+.translate__made img { width: min(100%, 440px); border-radius: 28px; }
+.translate__made:not(:empty) ~ .phone { display: none; } /* the made scene stands in for the drawn phone */
+@media (min-width: 900px) {
+  .translate__grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+  .scrub .translate__device .phone { transform: perspective(1400px) rotateY(calc(var(--lean, 0) * -18deg - 6deg)) rotateX(2deg); }
+}
+
+/* ── 8. Your words ────────────────────────────────────────────────────────────────────────────── */
+
+.words { padding: clamp(72px, 10vw, 140px) 0; }
+.trio { display: grid; gap: clamp(48px, 8vw, 72px) clamp(24px, 3vw, 40px); margin-bottom: 40px; }
+.trio__item { display: grid; justify-items: center; align-content: start; gap: 10px; text-align: center; }
+.trio__item .phone { --pw: min(62vw, 250px); margin-bottom: 18px; }
+.trio__item p { max-width: 20em; color: var(--second); }
+@media (min-width: 760px) {
+  .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .trio__item .phone { --pw: min(24vw, 250px); }
+  .trio__item--mid .phone { margin-top: -28px; margin-bottom: 46px; }
+  .scrub .trio__item .phone {
+    transform: perspective(1400px) rotateY(calc(var(--side, 0) * (6deg + var(--lean, 0) * 12deg))) translate3d(0, calc(var(--lean, 0) * 44px), 0);
+  }
+  .scrub .trio__item[data-lean="-1"] .phone { --side: 1; }
+  .scrub .trio__item[data-lean="1"] .phone { --side: -1; }
+}
+
+/* ── 9. The keyboard, up close ────────────────────────────────────────────────────────────────── */
+
+.keyboard { background: var(--fill); }
+.keyboard .stage { padding: clamp(72px, 10vw, 140px) 0; display: grid; gap: clamp(32px, 5vw, 56px); }
+.keyboard__head { max-width: 56rem; margin: 0 auto; padding: 0 var(--gutter); text-align: center; }
+.keyboard__head .lead { max-width: 34rem; margin: 14px auto 0; }
+.keyboard__body { max-width: var(--wide); width: 100%; margin: 0 auto; padding: 0 var(--gutter); display: grid; gap: 32px; align-items: center; }
+/* The keyboard as the capture has it: its rows, its bar, and on top the mic while it listens. */
+.exploded { width: 100%; max-width: 520px; margin: 0 auto; }
+.exploded__tilt { position: relative; border-radius: 18px; }
+.layer { display: block; position: absolute; background-repeat: no-repeat; }
+.layer--bar { border-radius: 18px 18px 0 0; }
+.layer--rows { border-radius: 0 0 18px 18px; }
+.layer--mic { border-radius: 999px; }
+.layer--rings { pointer-events: none; }
+.layer--rings i { position: absolute; inset: calc(var(--spread, 0) * -1px); border: 2px solid var(--live); border-radius: 999px; opacity: var(--o, 0); }
+.callouts { display: grid; gap: 12px; counter-reset: callout; max-width: 30em; margin: 0 auto; }
+.callouts li { position: relative; padding-left: 44px; min-height: 30px; font-size: 1.0625rem; line-height: 1.4; counter-increment: callout; }
+.callouts li::before {
+  content: counter(callout); position: absolute; left: 0; top: -1px; width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 50%; border: 1.5px solid var(--ink); font-size: 0.875rem; font-weight: 650;
+}
+.keyboard__more { max-width: var(--wide); width: 100%; margin: 0 auto; padding: 0 var(--gutter); display: grid; gap: 14px; }
+.keyboard__more ul { display: grid; gap: 14px; color: var(--second); }
+.keyboard__more b { color: var(--ink); font-weight: 650; }
+@media (min-width: 760px) { .keyboard__more ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; } }
+@media (min-width: 900px) {
+  .keyboard__body { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(32px, 6vw, 88px); }
+  /* Pinned (home.js gives the section its length only where the stage holds all of this): closer
+     together, the keyboard sized by the screen's height, its points and the last block lit in turn. */
+  .scrub .keyboard[style*="--len"] .stage { align-content: center; padding: calc(var(--nav-h) + 8px) 0 16px; gap: clamp(12px, 3svh, 44px); }
+  .scrub .keyboard[style*="--len"] .exploded { max-width: min(520px, 58svh); perspective: 1600px; margin-top: clamp(12px, 6svh, 72px); padding-bottom: 22px; }
+  @media (max-height: 779px) { .scrub .keyboard[style*="--len"] .keyboard__more { gap: 8px; } }
+  .scrub .keyboard[style*="--len"] .exploded__tilt { transform-style: preserve-3d; }
+  .scrub .keyboard[style*="--len"] .layer { backface-visibility: hidden; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06); }
+  .scrub .keyboard[style*="--len"] .callouts li { opacity: 0.22; transition: opacity 0.4s; }
+  .scrub .keyboard[style*="--len"] .callouts li.on { opacity: 1; }
+  .scrub .keyboard[style*="--len"] .keyboard__more { opacity: 0; transition: opacity 0.5s; }
+  .scrub .keyboard[style*="--len"] .keyboard__more.on,
+  .scrub .keyboard[style*="--len"] .keyboard__more:focus-within { opacity: 1; } /* never focus on something unseen */
+}
+
+/* ── On both kinds of phone ───────────────────────────────────────────────────────────────────── */
+
+.both { padding: clamp(72px, 10vw, 140px) 0 0; }
+.pair { display: flex; justify-content: center; align-items: flex-end; gap: clamp(20px, 6vw, 88px); }
+.pair li { display: grid; justify-items: center; gap: 18px; }
+.pair .phone { --pw: min(40vw, 250px); }
+.pair .store img { height: clamp(40px, 10.5vw, 48px); }
+
+/* ── 10. Pro ──────────────────────────────────────────────────────────────────────────────────── */
+
+.pro { padding: clamp(72px, 10vw, 140px) 0; }
+.pro .kicker { margin-bottom: 22px; }
+.duo { display: grid; gap: 20px; }
+.panel {
+  display: grid; grid-template-rows: auto 1fr; overflow: hidden;
+  border-radius: 32px; background: var(--fill);
+}
+.panel__copy { display: grid; gap: 12px; padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 48px) 0; }
+.panel__title { font-size: clamp(1.75rem, 3.6vw, 2.75rem); line-height: 1.05; font-weight: 700; letter-spacing: -0.035em; text-wrap: balance; }
+.panel__copy > p:last-child { color: var(--second); max-width: 32em; }
+.panel__made:empty { display: none; }
+.panel__made { margin-top: 20px; }
+.panel__made img { width: 100%; }
+.panel__screen { display: grid; justify-items: center; gap: 16px; align-self: end; padding: clamp(24px, 4vw, 40px) 0 0; }
+.panel__screen .phone { --pw: min(70vw, 300px); }
+.panel__screen .caption { order: -1; padding: 0 24px; }
+/* Only part of the phone shows: its top half running off the card, or its lower half (the keyboard) coming up into it. */
+.panel__crop { width: 100%; height: calc(min(70vw, 300px) * 1.36); overflow: hidden; display: flex; justify-content: center; align-items: flex-start; padding-top: 6px; }
+.panel__crop--end { align-items: flex-end; padding: 0 0 26px; -webkit-mask-image: linear-gradient(transparent, #000 16%); mask-image: linear-gradient(transparent, #000 16%); }
+@media (min-width: 900px) { .duo { grid-template-columns: 1fr 1fr; } }
+
+/* ── 11. Privacy ──────────────────────────────────────────────────────────────────────────────── */
+
+.privacy { padding: clamp(72px, 10vw, 140px) 0; background: var(--fill); }
+.privacy__grid { display: grid; gap: clamp(32px, 5vw, 56px); }
+.privacy .head { margin-bottom: 0; }
+.tiles { display: grid; gap: 16px; }
+.tile { display: grid; align-content: start; gap: 8px; padding: 26px; border-radius: 26px; background: var(--canvas); }
+.tile p { color: var(--second); }
+/* The mark's ring; with its red dot only where the tile is about the open microphone. */
+.tile__mark { width: 30px; height: 30px; margin-bottom: 18px; border-radius: 50%; border: 2.2px solid var(--ink); display: grid; place-items: center; }
+.tile__mark--live::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--live); }
+.privacy__note { max-width: 46em; font-size: 0.9375rem; line-height: 1.5; color: var(--second); }
+.privacy__note a { font-weight: 600; color: var(--ink); white-space: nowrap; }
+@media (min-width: 620px) { .tiles { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) {
+  .privacy__grid { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: start; }
+  .privacy__note { grid-column: 2; }
+  .privacy .head { position: sticky; top: calc(var(--nav-h) + 40px); }
+}
+
+/* ── 12. Pricing ──────────────────────────────────────────────────────────────────────────────── */
+
+.pricing { padding: clamp(72px, 10vw, 140px) 0; }
+.plans { width: 100%; max-width: 880px; margin: 0 auto 28px; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 0.9375rem; }
+.plans th, .plans td { padding: 14px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-weight: 400; }
+.plans thead th { padding-top: 18px; padding-bottom: 18px; font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; border-bottom: 0; }
+.plans thead th:first-child { width: 34%; }
+.plans tbody th { color: var(--second); }
+.plans td:last-child, .plans thead th:last-child { background: var(--ink); color: var(--canvas); border-bottom-color: #2c2c2e; padding-left: 16px; padding-right: 16px; }
+.plans thead th:last-child { border-radius: 22px 22px 0 0; }
+.plans tbody tr:last-child td:last-child { border-radius: 0 0 22px 22px; border-bottom: 0; padding-bottom: 20px; }
+.plans tbody tr:last-child th, .plans tbody tr:last-child td { border-bottom: 0; font-weight: 600; }
+.plans tbody tr:last-child th, .plans tbody tr:last-child td:not(:last-child) { color: var(--ink); }
+@media (max-width: 619px) {
+  .plans thead th:first-child { width: 29%; }
+  .plans thead th:nth-child(2) { width: 25%; }
+  .plans th, .plans td { padding-left: 8px; padding-right: 8px; }
+  .plans td:last-child, .plans thead th:last-child { padding-left: 12px; padding-right: 12px; }
+}
+@media (min-width: 620px) { .plans { font-size: 1.0625rem; } .plans th, .plans td { padding: 16px 22px; } .plans td:last-child, .plans thead th:last-child { padding-left: 26px; padding-right: 26px; } }
+
+/* ── 13. Questions ────────────────────────────────────────────────────────────────────────────── */
+
+.faq { padding: clamp(72px, 10vw, 140px) 0 clamp(48px, 7vw, 96px); background: var(--fill); }
+.faq h2 { margin-bottom: clamp(24px, 4vw, 44px); }
+.faq details { border-top: 1px solid var(--line); }
+.faq details:last-of-type { border-bottom: 1px solid var(--line); }
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; cursor: pointer;
+  font-size: clamp(1.0625rem, 1.8vw, 1.25rem); font-weight: 650; letter-spacing: -0.015em; list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; flex: none; width: 1em; text-align: center; font-size: 1.625rem; font-weight: 300; line-height: 1;
+  transition: transform 0.3s var(--ease);
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { max-width: 42em; padding-bottom: 14px; color: var(--second); }
+.faq details p:last-child { padding-bottom: 24px; }
+.faq details b { color: var(--ink); font-weight: 650; }
+.faq .caption { margin-top: 22px; }
+
+.notes { padding: 28px 0 44px; background: var(--fill); }
+.notes ol { list-style: decimal; display: grid; gap: 8px; font-size: 0.75rem; line-height: 1.5; color: var(--third); }
+.notes li { margin-left: 1.4em; padding-left: 2px; scroll-margin-top: calc(var(--nav-h) + 24px); }
+.notes li:target { color: var(--ink); }
+
+/* ── 14. The close ────────────────────────────────────────────────────────────────────────────── */
+
+.final { position: relative; overflow: clip; background: var(--night); color: var(--night-ink); text-align: center; }
+.final__plate { position: absolute; inset: 0; pointer-events: none; }
+.final__plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; }
+.final::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(70% 55% at 50% 108%, rgba(255, 82, 71, 0.32), rgba(255, 82, 71, 0) 70%);
+}
+body[data-slots~="cta-plate-wide"] .final::before { opacity: 0.3; }
+.final__inner { position: relative; display: grid; justify-items: center; gap: 18px; padding: clamp(96px, 15vw, 190px) var(--gutter) clamp(72px, 10vw, 130px); }
+.final__mark { position: relative; width: 96px; height: 96px; margin-bottom: 14px; color: var(--night-ink); }
+.final__mark svg { width: 96px; height: 96px; }
+.final__mark svg .live { fill: var(--night-live); }
+.final__mark::before {
+  content: ""; position: absolute; inset: -60%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 82, 71, 0.5), rgba(255, 82, 71, 0) 70%);
+  animation: rec 3.2s ease-in-out infinite;
+}
+/* A made ring (on black, 16:9) replaces the drawn mark and its glow. */
+body[data-slots~="cta-ring"] .final__mark { width: min(80vw, 420px); height: auto; aspect-ratio: 16 / 9; margin-bottom: 0; }
+body[data-slots~="cta-ring"] .final__mark::before { display: none; }
+.final__mark img { width: 100%; height: auto; mix-blend-mode: screen; }
+.final__mark img ~ svg { display: none; }
+@keyframes rec { 0%, 100% { opacity: 0.55; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.08); } }
+.final .lead { color: var(--night-second); }
+.final .stores { margin-top: 14px; }
+.final__foot {
+  position: relative; display: grid; justify-items: center; gap: 10px;
+  padding: 26px var(--gutter) calc(96px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.8125rem; color: var(--night-third);
+}
+.final__foot nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
+.final__foot nav a { color: var(--night-second); }
+.final__marks { max-width: 62em; font-size: 0.6875rem; line-height: 1.5; }
+@media (min-width: 760px) { .final__foot { padding-bottom: 40px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* On paper: home.js switches to the plain page before printing; here, what the stylesheet adds. The
+   two black sections keep their black, or their white words would be printed on white. */
+@media print {
+  .nav { position: absolute; }
+  .skip, .getbar { display: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .hero, .final, .deck__card, .plans td:last-child, .plans thead th:last-child, .flip__face--back { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* For the checks (scripts/site_check): time stands still, so a picture of a scroll position is
+   always the same picture. */
+.still *, .still *::before, .still *::after { animation-play-state: paused !important; transition: none !important; }

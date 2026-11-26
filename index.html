@@ -1,40 +1,487 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-nav="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>Redmic: talk instead of typing</title>
-<meta name="description" content="Redmic is a keyboard for iPhone that writes what you say, in any text field.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>Redmic: the voice keyboard that writes in any app</title>
+<meta name="description" content="Redmic is a voice dictation keyboard for iPhone and Android. Tap the mic in any text field and talk: punctuated text, no ums, names spelled your way.">
+<link rel="canonical" href="https://redmic.ai/">
 <meta name="apple-itunes-app" content="app-id=6829429992">
-<link rel="stylesheet" href="./style.css">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Redmic">
+<meta property="og:url" content="https://redmic.ai/">
+<meta property="og:title" content="Redmic: Stop typing. Just talk.">
+<meta property="og:description" content="The voice keyboard that writes in any app. Free on the App Store and Google Play.">
+<meta property="og:image" content="https://redmic.ai/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Redmic keyboard on a phone, its microphone key red, beside the words Stop typing. Just talk.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" as="image" href="assets/shots/kb-hero-idle-560.webp?v=56d875d2" imagesrcset="assets/shots/kb-hero-idle-560.webp?v=56d875d2 560w, assets/shots/kb-hero-idle-900.webp?v=d7370e88 900w, assets/shots/kb-hero-idle-1206.webp?v=78469387 1206w" imagesizes="(max-width: 600px) 65vw, 410px" fetchpriority="high">
+<link rel="stylesheet" href="home.css?v=ae51bf1f">
+<script>(function(d,c){try{if(!/[?&]plain(?=[&=]|$)/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&window.CSS&&CSS.supports("height","100svh")&&CSS.supports("transform-style","preserve-3d")&&!(navigator.connection&&navigator.connection.saveData)&&innerWidth>=340&&innerHeight>=520)c+=" scrub"}catch(e){}d.className=c;addEventListener("load",function(){if(!window.__redmic)d.className=""})})(document.documentElement,"js");</script>
+<script defer src="home.js?v=e96971c5" fetchpriority="high" onerror="document.documentElement.className=''"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Redmic: Voice Keyboard","description":"Redmic is a voice dictation keyboard for iPhone and Android. Tap the mic in any text field and talk: punctuated text, no ums, names spelled your way.","url":"https://redmic.ai/","applicationCategory":"UtilitiesApplication","operatingSystem":"iOS 26 or later, Android 10 or later","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"sameAs":["https://apps.apple.com/app/id6829429992","https://play.google.com/store/apps/details?id=com.antonmironenko.redmic"],"publisher":{"@type":"Organization","name":"OKNENOR L.L.C-FZ"}}</script>
 </head>
 <body>
-<header class="site"><a class="brand" href="./" aria-label="Redmic"><svg class="logo" viewBox="0 0 103.49 24" width="4.3121em" height="1em" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="red" cx="12" cy="12" r="4.2"/><path fill="currentColor" fill-rule="evenodd" d="M86.75 3.37C85.97 3.54 85.37 4.09 85.13 4.85L85.07 5.05L85.07 5.41L85.07 5.78L85.16 6.02C85.46 6.89 86.23 7.45 87.11 7.45C88.24 7.45 89.16 6.53 89.16 5.4C89.16 4.65 88.77 3.99 88.1 3.6C88.03 3.56 87.86 3.49 87.73 3.45L87.49 3.37L87.18 3.36C87.01 3.35 86.81 3.36 86.75 3.37ZM60.79 6.7L60.79 9.51L60.56 9.29C60.11 8.88 59.64 8.59 59.09 8.41C58.55 8.23 58.05 8.15 57.41 8.15C56.57 8.16 55.91 8.31 55.16 8.67C53.66 9.41 52.55 10.82 52.12 12.57C51.98 13.18 51.94 13.49 51.94 14.18C51.94 14.88 51.98 15.19 52.12 15.79C52.49 17.29 53.35 18.55 54.58 19.37C55.02 19.66 55.7 19.96 56.24 20.09C56.99 20.26 57.97 20.25 58.75 20.06C59.48 19.87 60.05 19.56 60.59 19.05L60.79 18.85L60.79 19.38L60.79 19.9L62.5 19.9L64.22 19.9L64.22 11.9L64.22 3.89L62.5 3.89L60.79 3.89L60.79 6.7ZM58.85 11.49C59.8 11.74 60.44 12.38 60.7 13.38L60.77 13.62L60.77 14.18L60.77 14.74L60.7 14.99C60.44 15.98 59.81 16.62 58.85 16.88L58.59 16.95L58.09 16.95L57.58 16.95L57.34 16.89C56.59 16.69 56.04 16.27 55.7 15.63C55.41 15.09 55.29 14.36 55.4 13.67C55.57 12.48 56.35 11.66 57.52 11.44C57.65 11.42 57.85 11.41 58.15 11.41L58.59 11.42L58.85 11.49ZM72.17 8.18C71.51 8.27 70.97 8.46 70.52 8.77C70.28 8.92 69.97 9.21 69.83 9.4L69.75 9.51L69.75 8.99L69.75 8.47L68.04 8.47L66.32 8.47L66.32 14.18L66.32 19.9L68.04 19.9L69.75 19.9L69.75 16.53L69.75 13.16L69.79 12.91C69.92 12.08 70.35 11.55 71.03 11.36C71.24 11.3 71.78 11.3 71.99 11.35C72.25 11.41 72.51 11.55 72.68 11.72C72.94 11.99 73.07 12.28 73.14 12.75L73.18 13L73.18 16.45L73.18 19.9L74.9 19.9L76.61 19.9L76.61 16.53L76.61 13.16L76.65 12.91C76.78 12.08 77.21 11.55 77.89 11.36C78.1 11.3 78.64 11.3 78.85 11.35C79.11 11.41 79.37 11.55 79.54 11.72C79.8 11.99 79.93 12.28 80.01 12.75L80.04 13L80.04 16.45L80.04 19.9L81.76 19.9L83.48 19.9L83.47 16.09C83.46 12.1 83.46 12.18 83.34 11.6C83.22 11.01 82.97 10.39 82.65 9.91C82.42 9.56 81.94 9.08 81.59 8.85C81.14 8.55 80.67 8.36 80.11 8.24L79.8 8.18L79.26 8.16C78.85 8.15 78.66 8.16 78.41 8.19C77.34 8.33 76.56 8.73 75.96 9.46C75.88 9.55 75.82 9.62 75.81 9.62C75.8 9.62 75.74 9.56 75.68 9.48C75.41 9.12 74.94 8.72 74.54 8.52C74.33 8.41 73.97 8.29 73.68 8.23C73.48 8.19 73.32 8.17 72.88 8.17C72.58 8.16 72.26 8.17 72.17 8.18ZM85.4 14.18L85.4 19.9L87.11 19.9L88.83 19.9L88.83 14.18L88.83 8.47L87.11 8.47L85.4 8.47L85.4 14.18Z"/><path class="red" fill-rule="evenodd" d="M44.47 8.19C41.99 8.48 40.05 10.12 39.43 12.47C39.14 13.55 39.14 14.77 39.41 15.85C39.96 17.98 41.57 19.51 43.81 20.03C44.71 20.24 45.93 20.27 46.87 20.11C47.82 19.94 48.66 19.59 49.37 19.05C49.81 18.72 50.58 17.89 50.49 17.85C50.47 17.83 49.86 17.48 49.12 17.06L47.79 16.29L47.65 16.42C47.26 16.77 46.72 17.02 46.12 17.11C45.77 17.17 45.03 17.15 44.69 17.07C44.09 16.94 43.69 16.73 43.33 16.36C43.12 16.13 42.86 15.71 42.86 15.58C42.86 15.57 44.6 15.56 46.91 15.56L50.96 15.56L50.99 15.4C51.06 14.95 51.08 14.77 51.08 14.21C51.08 13.58 51.06 13.32 50.96 12.84C50.45 10.27 48.49 8.46 45.94 8.18C45.61 8.14 44.84 8.15 44.47 8.19ZM45.96 11.27C46.4 11.38 46.72 11.55 46.99 11.81C47.28 12.09 47.49 12.42 47.63 12.81L47.69 12.99L45.23 12.99C43.29 12.99 42.78 12.98 42.78 12.96C42.78 12.9 42.95 12.51 43.04 12.34C43.38 11.74 43.99 11.34 44.74 11.22C45.01 11.18 45.73 11.21 45.96 11.27ZM95.63 8.19C92.82 8.55 90.76 10.58 90.4 13.36C90.35 13.73 90.35 14.52 90.39 14.9C90.67 17.5 92.52 19.54 95.07 20.08C95.92 20.26 96.99 20.25 97.84 20.06C99.33 19.71 100.64 18.78 101.43 17.51C101.5 17.4 101.56 17.29 101.56 17.28C101.56 17.27 98.68 15.6 98.6 15.57C98.59 15.56 98.54 15.63 98.49 15.72C98.39 15.91 98.1 16.22 97.88 16.38C97.67 16.54 97.37 16.67 97.07 16.75L96.82 16.82L96.38 16.82L95.93 16.82L95.71 16.76C94.71 16.51 94.03 15.78 93.83 14.75C93.75 14.31 93.79 13.67 93.92 13.24C94.19 12.42 94.84 11.83 95.71 11.6L95.93 11.55L96.38 11.55L96.82 11.55L97.06 11.62C97.74 11.8 98.2 12.15 98.56 12.76L98.58 12.81L99.6 12.22C100.16 11.9 100.83 11.51 101.09 11.36C101.46 11.14 101.56 11.07 101.55 11.04C101.47 10.83 101.01 10.23 100.66 9.88C99.78 9 98.64 8.42 97.36 8.22C97 8.16 96 8.14 95.63 8.19ZM38.5 8.26C37.84 8.33 37.15 8.58 36.65 8.94C36.22 9.23 35.83 9.71 35.64 10.16C35.59 10.28 35.54 10.4 35.53 10.43C35.52 10.46 35.51 10.07 35.5 9.47L35.5 8.47L33.79 8.47L32.07 8.47L32.07 14.18L32.07 19.9L33.79 19.9L35.5 19.9L35.51 17.11L35.52 14.33L35.57 14.09C35.68 13.65 35.81 13.36 36.04 13.06C36.39 12.61 36.97 12.28 37.68 12.14C37.92 12.09 38.72 12.07 38.86 12.11L38.93 12.13L38.93 10.18L38.93 8.23L38.82 8.24C38.76 8.24 38.62 8.25 38.5 8.26Z"/></svg></a></header>
-<main>
-<h1>Talk instead of typing.</h1>
-<p class="lede">Redmic is a keyboard for iPhone that writes what you say. Switch to it in any text
-field, tap the mic and talk. Your words arrive punctuated, with “um” and “uh” gone, and with names
-spelled the way you spell them.</p>
-<a class="button store" href="https://apps.apple.com/app/id6829429992">Download on the App Store</a>
+<a class="skip" href="#main">Skip to content</a>
 
-<h2>What it does</h2>
-<ul class="features">
-<li><strong>Writes wherever you write.</strong> Messages, email, notes, documents and chats with AI.</li>
-<li><strong>Your words, or your words tidied.</strong> Word-to-Word keeps exactly what you said.
-Rewrite fixes grammar and flow without changing your meaning. Email turns it into a clear, polite
-email, and Funny makes it playful, with a light joke or emoji.</li>
-<li><strong>Translates as you speak.</strong> Speak one language and type in another.</li>
-<li><strong>Learns your words.</strong> A dictionary for names, brands and jargon, and snippets
-for what you type often.</li>
-<li><strong>Keeps your words yours.</strong> Your history stays on your iPhone. Redmic asks before
-a recording goes to the AI services that write your text, and they don’t train on it.
-<a href="privacy/">Privacy Policy</a></li>
-</ul>
+<header class="nav">
+  <a class="nav__brand" href="./" aria-label="Redmic"><svg class="logo" viewBox="0 0 103.49 24" width="4.3121em" height="1em" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="red" cx="12" cy="12" r="4.2"/><path fill="currentColor" fill-rule="evenodd" d="M86.75 3.37C85.97 3.54 85.37 4.09 85.13 4.85L85.07 5.05L85.07 5.41L85.07 5.78L85.16 6.02C85.46 6.89 86.23 7.45 87.11 7.45C88.24 7.45 89.16 6.53 89.16 5.4C89.16 4.65 88.77 3.99 88.1 3.6C88.03 3.56 87.86 3.49 87.73 3.45L87.49 3.37L87.18 3.36C87.01 3.35 86.81 3.36 86.75 3.37ZM60.79 6.7L60.79 9.51L60.56 9.29C60.11 8.88 59.64 8.59 59.09 8.41C58.55 8.23 58.05 8.15 57.41 8.15C56.57 8.16 55.91 8.31 55.16 8.67C53.66 9.41 52.55 10.82 52.12 12.57C51.98 13.18 51.94 13.49 51.94 14.18C51.94 14.88 51.98 15.19 52.12 15.79C52.49 17.29 53.35 18.55 54.58 19.37C55.02 19.66 55.7 19.96 56.24 20.09C56.99 20.26 57.97 20.25 58.75 20.06C59.48 19.87 60.05 19.56 60.59 19.05L60.79 18.85L60.79 19.38L60.79 19.9L62.5 19.9L64.22 19.9L64.22 11.9L64.22 3.89L62.5 3.89L60.79 3.89L60.79 6.7ZM58.85 11.49C59.8 11.74 60.44 12.38 60.7 13.38L60.77 13.62L60.77 14.18L60.77 14.74L60.7 14.99C60.44 15.98 59.81 16.62 58.85 16.88L58.59 16.95L58.09 16.95L57.58 16.95L57.34 16.89C56.59 16.69 56.04 16.27 55.7 15.63C55.41 15.09 55.29 14.36 55.4 13.67C55.57 12.48 56.35 11.66 57.52 11.44C57.65 11.42 57.85 11.41 58.15 11.41L58.59 11.42L58.85 11.49ZM72.17 8.18C71.51 8.27 70.97 8.46 70.52 8.77C70.28 8.92 69.97 9.21 69.83 9.4L69.75 9.51L69.75 8.99L69.75 8.47L68.04 8.47L66.32 8.47L66.32 14.18L66.32 19.9L68.04 19.9L69.75 19.9L69.75 16.53L69.75 13.16L69.79 12.91C69.92 12.08 70.35 11.55 71.03 11.36C71.24 11.3 71.78 11.3 71.99 11.35C72.25 11.41 72.51 11.55 72.68 11.72C72.94 11.99 73.07 12.28 73.14 12.75L73.18 13L73.18 16.45L73.18 19.9L74.9 19.9L76.61 19.9L76.61 16.53L76.61 13.16L76.65 12.91C76.78 12.08 77.21 11.55 77.89 11.36C78.1 11.3 78.64 11.3 78.85 11.35C79.11 11.41 79.37 11.55 79.54 11.72C79.8 11.99 79.93 12.28 80.01 12.75L80.04 13L80.04 16.45L80.04 19.9L81.76 19.9L83.48 19.9L83.47 16.09C83.46 12.1 83.46 12.18 83.34 11.6C83.22 11.01 82.97 10.39 82.65 9.91C82.42 9.56 81.94 9.08 81.59 8.85C81.14 8.55 80.67 8.36 80.11 8.24L79.8 8.18L79.26 8.16C78.85 8.15 78.66 8.16 78.41 8.19C77.34 8.33 76.56 8.73 75.96 9.46C75.88 9.55 75.82 9.62 75.81 9.62C75.8 9.62 75.74 9.56 75.68 9.48C75.41 9.12 74.94 8.72 74.54 8.52C74.33 8.41 73.97 8.29 73.68 8.23C73.48 8.19 73.32 8.17 72.88 8.17C72.58 8.16 72.26 8.17 72.17 8.18ZM85.4 14.18L85.4 19.9L87.11 19.9L88.83 19.9L88.83 14.18L88.83 8.47L87.11 8.47L85.4 8.47L85.4 14.18Z"/><path class="red" fill-rule="evenodd" d="M44.47 8.19C41.99 8.48 40.05 10.12 39.43 12.47C39.14 13.55 39.14 14.77 39.41 15.85C39.96 17.98 41.57 19.51 43.81 20.03C44.71 20.24 45.93 20.27 46.87 20.11C47.82 19.94 48.66 19.59 49.37 19.05C49.81 18.72 50.58 17.89 50.49 17.85C50.47 17.83 49.86 17.48 49.12 17.06L47.79 16.29L47.65 16.42C47.26 16.77 46.72 17.02 46.12 17.11C45.77 17.17 45.03 17.15 44.69 17.07C44.09 16.94 43.69 16.73 43.33 16.36C43.12 16.13 42.86 15.71 42.86 15.58C42.86 15.57 44.6 15.56 46.91 15.56L50.96 15.56L50.99 15.4C51.06 14.95 51.08 14.77 51.08 14.21C51.08 13.58 51.06 13.32 50.96 12.84C50.45 10.27 48.49 8.46 45.94 8.18C45.61 8.14 44.84 8.15 44.47 8.19ZM45.96 11.27C46.4 11.38 46.72 11.55 46.99 11.81C47.28 12.09 47.49 12.42 47.63 12.81L47.69 12.99L45.23 12.99C43.29 12.99 42.78 12.98 42.78 12.96C42.78 12.9 42.95 12.51 43.04 12.34C43.38 11.74 43.99 11.34 44.74 11.22C45.01 11.18 45.73 11.21 45.96 11.27ZM95.63 8.19C92.82 8.55 90.76 10.58 90.4 13.36C90.35 13.73 90.35 14.52 90.39 14.9C90.67 17.5 92.52 19.54 95.07 20.08C95.92 20.26 96.99 20.25 97.84 20.06C99.33 19.71 100.64 18.78 101.43 17.51C101.5 17.4 101.56 17.29 101.56 17.28C101.56 17.27 98.68 15.6 98.6 15.57C98.59 15.56 98.54 15.63 98.49 15.72C98.39 15.91 98.1 16.22 97.88 16.38C97.67 16.54 97.37 16.67 97.07 16.75L96.82 16.82L96.38 16.82L95.93 16.82L95.71 16.76C94.71 16.51 94.03 15.78 93.83 14.75C93.75 14.31 93.79 13.67 93.92 13.24C94.19 12.42 94.84 11.83 95.71 11.6L95.93 11.55L96.38 11.55L96.82 11.55L97.06 11.62C97.74 11.8 98.2 12.15 98.56 12.76L98.58 12.81L99.6 12.22C100.16 11.9 100.83 11.51 101.09 11.36C101.46 11.14 101.56 11.07 101.55 11.04C101.47 10.83 101.01 10.23 100.66 9.88C99.78 9 98.64 8.42 97.36 8.22C97 8.16 96 8.14 95.63 8.19ZM38.5 8.26C37.84 8.33 37.15 8.58 36.65 8.94C36.22 9.23 35.83 9.71 35.64 10.16C35.59 10.28 35.54 10.4 35.53 10.43C35.52 10.46 35.51 10.07 35.5 9.47L35.5 8.47L33.79 8.47L32.07 8.47L32.07 14.18L32.07 19.9L33.79 19.9L35.5 19.9L35.51 17.11L35.52 14.33L35.57 14.09C35.68 13.65 35.81 13.36 36.04 13.06C36.39 12.61 36.97 12.28 37.68 12.14C37.92 12.09 38.72 12.07 38.86 12.11L38.93 12.13L38.93 10.18L38.93 8.23L38.82 8.24C38.76 8.24 38.62 8.25 38.5 8.26Z"/></svg></a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#modes">Modes</a>
+    <a href="#translate">Translate</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+  <a class="button button--small nav__get" href="#get" data-get>Get Redmic</a>
+</header>
+
+<main id="main">
+
+<!-- 1–3. The opening: the promise, the demo, and the turn from black to white. One pinned scene. -->
+<section class="scene hero" id="top" data-scene="hero" data-len="440,360" data-tone="dark">
+  <div class="stage">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__plate" aria-hidden="true"></div>
+
+    <div class="hero__copy" data-part="copy">
+      <p class="eyebrow">Redmic · Voice keyboard</p>
+      <h1>Stop typing. <span class="nowrap">Just talk.</span></h1>
+      <p class="lead">The voice keyboard that writes in any app.</p>
+      <div class="stores">
+        <a class="store" href="https://apps.apple.com/app/id6829429992"><img src="assets/badges/app-store.svg?v=2f2fe1cb" width="144" height="48" alt="Download on the App Store"></a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.antonmironenko.redmic"><img src="assets/badges/google-play.png?v=454035a4" width="161" height="48" alt="Get it on Google Play"></a>
+      </div>
+      <p class="fine">Free to start. <span class="nowrap">iPhone with iOS 26 or later.</span> <span class="nowrap">Android 10 or later.</span></p>
+    </div>
+
+    <div class="hero__say" data-part="say">
+      <p class="tag">You say</p>
+      <p class="say__line" aria-hidden="true"><span class="w w--filler">um</span><span class="w">could</span> <span class="w">we</span> <span class="w">meet</span> <span class="w">on</span> <span class="w">thursday</span> <span class="w">afternoon</span> <span class="w">instead</span> <span class="w w--filler">uh</span><span class="w">my</span> <span class="w">morning</span> <span class="w">is</span> <span class="w">already</span> <span class="w">full</span></p>
+      <p class="sr">um could we meet on thursday afternoon instead uh my morning is already full</p>
+      <p class="hero__writes"><span class="tag">Redmic writes</span> Could we meet on Thursday afternoon instead? My morning is already full.</p>
+    </div>
+
+    <ol class="hero__steps" data-part="steps" aria-hidden="true">
+      <li>Tap the mic.</li>
+      <li>Talk.</li>
+      <li>Tap ✓.</li>
+    </ol>
+
+    <div class="hero__claim" data-part="claim">
+      <h2>Messy speech. <span class="nowrap">Clean text.</span></h2>
+      <p class="lead">Punctuation in, “um” and “uh” out, names spelled your way.</p>
+    </div>
+
+    <div class="hero__device" data-part="device">
+      <div class="phone phone--solid" data-part="phone">
+        <i class="phone__shadow" data-part="shadow" aria-hidden="true"></i>
+        <div class="phone__tilt" data-part="tilt">
+          <i class="phone__rim phone__rim--top"></i><i class="phone__rim phone__rim--bottom"></i><i class="phone__rim phone__rim--left"></i><i class="phone__rim phone__rim--right"></i>
+          <div class="phone__back"></div>
+          <div class="phone__front">
+            <div class="phone__screen" data-part="screen" data-frame="0">
+              <img src="assets/shots/kb-hero-idle-560.webp?v=56d875d2" srcset="assets/shots/kb-hero-idle-560.webp?v=56d875d2 560w, assets/shots/kb-hero-idle-900.webp?v=d7370e88 900w, assets/shots/kb-hero-idle-1206.webp?v=78469387 1206w" sizes="(max-width: 600px) 65vw, 410px" width="1206" height="2622" alt="The Redmic keyboard in a chat: letter keys, with a wide microphone key at the top right of its bar." decoding="async" loading="eager">
+              <img src="assets/shots/kb-hero-listening-560.webp?v=c6981cf6" srcset="assets/shots/kb-hero-listening-560.webp?v=c6981cf6 560w, assets/shots/kb-hero-listening-900.webp?v=171a7dfd 900w, assets/shots/kb-hero-listening-1206.webp?v=34dc0d4e 1206w" sizes="(max-width: 600px) 65vw, 410px" width="1206" height="2622" alt="" decoding="async" loading="eager">
+              <img src="assets/shots/kb-hero-inserted-560.webp?v=90806483" srcset="assets/shots/kb-hero-inserted-560.webp?v=90806483 560w, assets/shots/kb-hero-inserted-900.webp?v=d3f8563c 900w, assets/shots/kb-hero-inserted-1206.webp?v=70464584 1206w" sizes="(max-width: 600px) 65vw, 410px" width="1206" height="2622" alt="" decoding="async" loading="eager">
+              <div class="rings" data-part="rings" style="left:75.3731%;top:61.3272%;width:21.8905%;height:4.5767%" aria-hidden="true"><i></i><i></i><i></i></div>
+              <i class="probe" data-part="field" style="left:16.9154%;top:46.6438%;width:79.1045%;height:9.1915%" aria-hidden="true"></i>
+              <i class="probe" data-part="mic" style="left:75.3731%;top:61.3272%;width:21.8905%;height:4.5767%" aria-hidden="true"></i>
+            </div>
+            <i class="phone__glare" data-part="glare" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__curtain" data-part="curtain" aria-hidden="true">
+      <div class="hero__claim">
+        <p class="h2">Messy speech. <span class="nowrap">Clean text.</span></p>
+        <p class="lead">Punctuation in, “um” and “uh” out, names spelled your way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. What it is, in the listing's own words. -->
+<section class="statement" data-view="statement" data-tone="light">
+  <p class="statement__text">Redmic is a keyboard that writes what you say. Switch to it in any text field, tap the mic and talk. Your words arrive in seconds: punctuated, with “um” and “uh” gone, and with names spelled the way you spell them.</p>
+</section>
+
+<!-- People using it: a row of photographs, shown once they have been made (docs/site/image-prompts.md). -->
+<div class="life" aria-hidden="true"></div>
+
+<!-- 5. The whole page in six cards. -->
+<section class="short" aria-labelledby="short-title" data-tone="light">
+  <h2 class="kicker" id="short-title">In short.</h2>
+  <ul class="short__row" tabindex="0" aria-label="Highlights">
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="13" width="38" height="22" rx="8"/><path d="M15 20v8"/></svg></div>
+      <h3>Any text field</h3>
+      <p>Messages, email, notes, documents and chats with AI.</p>
+      <a href="#keyboard">Keyboard <span aria-hidden="true">›</span></a>
+    </li>
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="6" y="6" width="15" height="15" rx="4.5"/><rect x="27" y="6" width="15" height="15" rx="4.5"/><rect x="6" y="27" width="15" height="15" rx="4.5"/><rect x="27" y="27" width="15" height="15" rx="4.5"/></svg></div>
+      <h3>Four styles</h3>
+      <p>Your exact words, tidied, an email, or playful.</p>
+      <a href="#modes">Modes <span aria-hidden="true">›</span></a>
+    </li>
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 11a5 5 0 0 1 5-5h14a5 5 0 0 1 5 5v9a5 5 0 0 1-5 5H16l-6 5v-5.4A5 5 0 0 1 7 20z"/><path d="M36 19h1a5 5 0 0 1 5 5v9a5 5 0 0 1-3 4.6V43l-6-5H23a5 5 0 0 1-4.6-3"/></svg></div>
+      <h3>Translate</h3>
+      <p>Speak 65 languages and type in 91.<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+      <a href="#translate">Translate <span aria-hidden="true">›</span></a>
+    </li>
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 9a4 4 0 0 1 4-4h24v32H14a4 4 0 0 0-4 4z"/><path d="M10 41a4 4 0 0 0 4 4h24v-8"/><path d="M18 14h12M18 21h8"/></svg></div>
+      <h3>Spelled your way</h3>
+      <p>Teach it names, brands and jargon once.</p>
+      <a href="#words">Your words <span aria-hidden="true">›</span></a>
+    </li>
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17"/><circle class="live" cx="24" cy="24" r="7.5"/></svg></div>
+      <h3>Clear when it listens</h3>
+      <p>While you dictate, Redmic’s mic turns red.</p>
+      <a href="#privacy">Privacy <span aria-hidden="true">›</span></a>
+    </li>
+    <li class="card" data-reveal>
+      <div class="card__icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 24.5 19 36 40 12"/></svg></div>
+      <h3>Free to start</h3>
+      <p>A 14-day trial of Pro, then 1,000 words a week.<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></p>
+      <a href="#pricing">Pricing <span aria-hidden="true">›</span></a>
+    </li>
+  </ul>
+</section>
+
+<!-- 6. One sentence, four ways to write it: the app's own sample. Pinned on wide screens. -->
+<section class="scene modes" id="modes" data-scene="modes" data-len="290,0" data-tone="light">
+  <div class="stage">
+    <div class="modes__head">
+      <h2>One thought, four styles.</h2>
+      <p class="lead">Word-to-Word, Rewrite, Email or Funny. Switch from the keyboard.</p>
+    </div>
+    <div class="modes__body">
+      <figure class="spoken">
+        <figcaption class="tag">You say</figcaption>
+        <blockquote>um so me and him was thinking maybe we could like meet on friday at 4 if that works for you guys</blockquote>
+      </figure>
+      <div class="modes__tabs" role="group" aria-label="Show a style">
+        <button class="chip" type="button" data-mode="0" aria-pressed="true">Word-to-Word</button>
+        <button class="chip" type="button" data-mode="1" aria-pressed="false">Rewrite</button>
+        <button class="chip" type="button" data-mode="2" aria-pressed="false">Email</button>
+        <button class="chip" type="button" data-mode="3" aria-pressed="false">Funny</button>
+      </div>
+      <ol class="deck" data-part="deck" data-active="0" tabindex="0" aria-label="What each style writes">
+        <li class="deck__card">
+          <p class="deck__name">Word-to-Word</p>
+          <p class="deck__hint">Your exact words, punctuated</p>
+          <p class="deck__text">So, me and him was thinking maybe we could, like, meet on Friday at 4 if that works for you guys.</p>
+        </li>
+        <li class="deck__card">
+          <p class="deck__name">Rewrite</p>
+          <p class="deck__hint">Fixes grammar and flow, keeps your meaning</p>
+          <p class="deck__text">He and I were thinking maybe we could meet on Friday at 4, if that works for you guys.</p>
+        </li>
+        <li class="deck__card">
+          <p class="deck__name">Email</p>
+          <p class="deck__hint">A clear, polite email</p>
+          <p class="deck__text">Hello,<br><br>He and I were thinking we could meet on Friday at 4, if that works for you all.<br><br>Best regards,</p>
+        </li>
+        <li class="deck__card">
+          <p class="deck__name">Funny</p>
+          <p class="deck__hint">Playful, with a light joke or emoji</p>
+          <p class="deck__text">He and I were thinking we could maybe hang out on Friday at 4, if that works for you guys! 🎉</p>
+        </li>
+      </ol>
+      <p class="caption">The four answers are the app’s own sample.<sup><a href="#fn5" aria-label="Footnote 5">5</a></sup> Pick a style on the Style screen, or from the style pill on the keyboard. All four are free.</p>
+      <figure class="modes__menu">
+        <i class="slice" style="aspect-ratio:1206/834;background-image:url(assets/shots/kb-style-900.webp?v=7f4ee899);background-size:100% auto;background-position:0% 87.4161%" role="img" aria-label="The style menu in the Redmic keyboard: Word-to-Word, Rewrite, Email, Funny and, for Pro, Redmic chat."></i>
+        <figcaption class="caption">The style menu, in the keyboard.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Translate. -->
+<section class="translate" id="translate" data-view="translate" data-tone="light">
+  <div class="wrap translate__grid">
+    <div class="translate__copy">
+      <h2>Speak one language, send another.</h2>
+      <p class="lead">Speak 65 languages, type in 91. Translate is one tap.</p>
+      <p class="stat" role="img" aria-label="65 languages you can speak, 91 you can write in"><span>65</span><i aria-hidden="true">→</i><span>91</span></p>
+      <p class="stat__caption">languages you can speak<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup> <span aria-hidden="true">·</span> languages you can write in<sup><a href="#fn1" aria-label="Footnote 1">1</a></sup></p>
+      <p class="body">Translate is a chip in the keyboard bar. Tap it to turn translation on or off. Hold it to pick a language. Redmic detects the language you speak.</p>
+      <div class="flip" data-part="flip">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <p class="tag">Example · You say</p>
+            <p>Can we meet on Thursday afternoon? My morning is already full.</p>
+          </div>
+          <div class="flip__face flip__face--back">
+            <p class="tag">Example · Redmic writes</p>
+            <p lang="es">¿Podemos vernos el jueves por la tarde? Mi mañana ya está llena.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figure class="translate__device" data-part="lean">
+      <div class="translate__made"></div>
+      <div class="phone phone--flat">
+        <div class="phone__front"><div class="phone__screen"><img src="assets/shots/kb-translate-560.webp?v=089dcf4f" srcset="assets/shots/kb-translate-560.webp?v=089dcf4f 560w, assets/shots/kb-translate-900.webp?v=1d569613 900w" sizes="(max-width: 600px) 65vw, 410px" width="900" height="1957" alt="A chat with Translate switched on in the Redmic keyboard, and a message written in Spanish." decoding="async" loading="lazy"></div></div>
+      </div>
+      <figcaption class="caption">Translate on, in a chat. Tap the chip: on or off. Hold it: pick a language.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 8. It learns your words. -->
+<section class="words" id="words" data-tone="light">
+  <div class="wrap">
+    <div class="head">
+      <h2>Spells your names right.</h2>
+      <p class="lead">Teach it names, brands and jargon once.</p>
+    </div>
+    <ul class="trio">
+      <li class="trio__item" data-view="lean" data-lean="-1">
+        <div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/dictionary-560.webp?v=cfe7c5ab" srcset="assets/shots/dictionary-560.webp?v=cfe7c5ab 560w, assets/shots/dictionary-900.webp?v=819e44c4 900w" sizes="(max-width: 760px) 62vw, 280px" width="900" height="1957" alt="Redmic’s Dictionary screen, with a list of added names and words." decoding="async" loading="lazy"></div></div></div>
+        <h3>Dictionary</h3>
+        <p>Add names, brands and jargon. Fix a word it mishears, like “cooper netties” to “Kubernetes”. Add a word straight from the keyboard.</p>
+      </li>
+      <li class="trio__item trio__item--mid" data-view="lean" data-lean="0">
+        <div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/snippets-560.webp?v=d0707903" srcset="assets/shots/snippets-560.webp?v=d0707903 560w, assets/shots/snippets-900.webp?v=4e80f512 900w" sizes="(max-width: 760px) 62vw, 280px" width="900" height="1957" alt="Redmic’s Snippets screen, with short phrases and the text each one types." decoding="async" loading="lazy"></div></div></div>
+        <h3>Say less, type more.</h3>
+        <p>Say “my calendar link” and Redmic types the whole link.</p>
+      </li>
+      <li class="trio__item" data-view="lean" data-lean="1">
+        <div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/notes-560.webp?v=3603659b" srcset="assets/shots/notes-560.webp?v=3603659b 560w, assets/shots/notes-900.webp?v=47151f09 900w" sizes="(max-width: 760px) 62vw, 280px" width="900" height="1957" alt="Redmic’s Notes screen, with a list of saved thoughts." decoding="async" loading="lazy"></div></div></div>
+        <h3>Notes</h3>
+        <p>Say a thought and keep it. Your notes are synced across your devices.</p>
+      </li>
+    </ul>
+    <p class="caption center">Dictionary, Snippets and Notes are free.</p>
+  </div>
+</section>
+
+<!-- 9. The keyboard, taken apart. Pinned on wide screens. -->
+<section class="scene keyboard" id="keyboard" data-scene="keyboard" data-len="270,0" data-tone="light">
+  <div class="stage">
+    <div class="keyboard__head">
+      <h2>A full keyboard, with a mic.</h2>
+      <p class="lead">It opens on letters. The mic sits in the bar, top right.</p>
+    </div>
+    <div class="keyboard__body">
+      <div class="exploded" data-part="exploded" aria-hidden="true">
+        <div class="exploded__tilt" data-part="exploded-tilt" style="aspect-ratio:1206/834">
+          <i class="layer layer--rows" data-part="layer-rows" style="left:0%;top:23.741%;width:100%;height:76.259%;background-image:url(assets/shots/kb-hero-idle-1206.webp?v=78469387);background-size:100% auto;background-position:0% 88.6707%"></i>
+          <i class="layer layer--bar" data-part="layer-bar" style="left:0%;top:0%;width:100%;height:23.741%;background-image:url(assets/shots/kb-hero-idle-1206.webp?v=78469387);background-size:100% auto;background-position:0% 64.4802%"></i>
+          <i class="layer layer--mic" data-part="layer-mic" style="left:75.3731%;top:5.3957%;width:21.8905%;height:14.3885%;background-image:url(assets/shots/kb-hero-listening-1206.webp?v=34dc0d4e);background-size:456.8182% auto;background-position:96.4968% 64.2686%"></i>
+          <i class="layer layer--rings" data-part="layer-rings" style="left:75.3731%;top:5.3957%;width:21.8905%;height:14.3885%"><i></i><i></i><i></i></i>
+        </div>
+      </div>
+      <ol class="callouts" data-part="callouts">
+        <li>A tap you can feel when it starts, and again on ✓.</li>
+        <li>The keys keep typing while it listens.</li>
+        <li>Tap ✓, or press Return, and the text goes in.</li>
+        <li>Hold Translate to pick a language.</li>
+        <li>8 layouts, emoji and autocorrect. Hold a letter for accents.</li>
+      </ol>
+    </div>
+    <div class="keyboard__more" data-part="more">
+      <h3>Start it your way.</h3>
+      <ul>
+        <li><b>Walkie-Talkie.</b> Optional. Hold the mic to talk. Let go and the text goes in.<sup><a href="#fn6" aria-label="Footnote 6">6</a></sup></li>
+        <li><b>iPhone.</b> Action Button, Control Center and Shortcuts.</li>
+        <li><b>Android.</b> A Quick Settings tile and launcher shortcuts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- On both kinds of phone. -->
+<section class="both" id="phones" data-tone="light">
+  <div class="wrap">
+    <div class="head">
+      <h2>On iPhone and Android.</h2>
+      <p class="lead">One account on both. Your dictionary, snippets and notes follow you.</p>
+    </div>
+    <ul class="pair">
+      <li data-reveal>
+        <div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/kb-hero-idle-560.webp?v=56d875d2" srcset="assets/shots/kb-hero-idle-560.webp?v=56d875d2 560w, assets/shots/kb-hero-idle-900.webp?v=d7370e88 900w, assets/shots/kb-hero-idle-1206.webp?v=78469387 1206w" sizes="(max-width: 760px) 40vw, 250px" width="1206" height="2622" alt="The Redmic keyboard for iPhone, in a chat." decoding="async" loading="lazy"></div></div></div>
+        <a class="store" href="https://apps.apple.com/app/id6829429992"><img src="assets/badges/app-store.svg?v=2f2fe1cb" width="144" height="48" alt="Download on the App Store" loading="lazy"></a>
+        <p class="caption">iOS 26 or later.</p>
+      </li>
+      <li data-reveal>
+        <div class="phone phone--flat phone--android"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/android-chat-560.webp?v=d29e6900" srcset="assets/shots/android-chat-560.webp?v=d29e6900 560w, assets/shots/android-chat-900.webp?v=fba9509d 900w" sizes="(max-width: 760px) 40vw, 250px" width="900" height="1600" alt="The Redmic keyboard on an Android phone, in a chat." decoding="async" loading="lazy"></div></div></div>
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.antonmironenko.redmic"><img src="assets/badges/google-play.png?v=454035a4" width="161" height="48" alt="Get it on Google Play" loading="lazy"></a>
+        <p class="caption">Android 10 or later.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10. Redmic Pro. -->
+<section class="pro" id="pro" data-tone="light">
+  <div class="wrap">
+    <h2 class="kicker">Redmic Pro</h2>
+    <div class="duo">
+      <article class="panel" data-reveal>
+        <div class="panel__copy">
+          <h3 class="panel__title">Tell it what to write.</h3>
+          <p class="lead">Redmic chat drafts it. You refine by voice.</p>
+          <p>Say “tell Anna I’m ten minutes late, the train is stuck, start without me.” Get a draft. Say “shorter” or “more formal.” Flip between versions. Nothing goes in until you tap Insert.</p>
+        </div>
+        <div class="panel__made"></div>
+        <figure class="panel__screen">
+          <div class="panel__crop panel__crop--end"><div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/kb-write-draft-560.webp?v=ea59e195" srcset="assets/shots/kb-write-draft-560.webp?v=ea59e195 560w, assets/shots/kb-write-draft-900.webp?v=1326460e 900w" sizes="(max-width: 760px) 70vw, 300px" width="900" height="1957" alt="Redmic chat in the keyboard, showing a drafted message and the Insert button." decoding="async" loading="lazy"></div></div></div></div>
+          <figcaption class="caption">The fifth choice in the keyboard’s style menu.</figcaption>
+        </figure>
+      </article>
+      <article class="panel" data-reveal>
+        <div class="panel__copy">
+          <h3 class="panel__title">Ask about everything you’ve said.</h3>
+          <p class="lead">Redmic AI is a chat about your own dictations and notes.</p>
+          <p>Answers come with dated sources. Try “What did I talk about this week?” or “Open to-dos.” A daily limit applies. It stays off until you tap Start.</p>
+        </div>
+        <figure class="panel__screen">
+          <div class="panel__crop"><div class="phone phone--flat"><div class="phone__front"><div class="phone__screen"><img src="assets/shots/ask-chat-560.webp?v=031fe6b4" srcset="assets/shots/ask-chat-560.webp?v=031fe6b4 560w, assets/shots/ask-chat-900.webp?v=447a7751 900w" sizes="(max-width: 760px) 70vw, 300px" width="900" height="1957" alt="Redmic AI in the app, answering “What happened today?”, with dated sources." decoding="async" loading="lazy"></div></div></div></div>
+          <figcaption class="caption">Redmic AI, in the app.</figcaption>
+        </figure>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Privacy. -->
+<section class="privacy" id="privacy" data-tone="light">
+  <div class="wrap privacy__grid">
+    <div class="head head--left">
+      <h2>You always know when it listens.</h2>
+      <p class="lead">And what you say stays yours.</p>
+    </div>
+    <ul class="tiles">
+      <li class="tile" data-reveal>
+        <span class="tile__mark tile__mark--live" aria-hidden="true"></span>
+        <h3>You can see it.</h3>
+        <p>While you dictate, Redmic’s mic turns red. On iPhone, iOS shows its orange dot whenever the microphone is open.</p>
+      </li>
+      <li class="tile" data-reveal>
+        <span class="tile__mark" aria-hidden="true"></span>
+        <h3>You start it.</h3>
+        <p>Nothing is sent until you tap the mic. Lock your iPhone and the microphone turns off within about a minute.</p>
+      </li>
+      <li class="tile" data-reveal>
+        <span class="tile__mark" aria-hidden="true"></span>
+        <h3>You’re asked first.</h3>
+        <p>Redmic asks before your first recording leaves your phone. The keyboard doesn’t record or send what you type.</p>
+      </li>
+      <li class="tile" data-reveal>
+        <span class="tile__mark" aria-hidden="true"></span>
+        <h3>No ads. No tracking.</h3>
+        <p>No analytics software. Redmic’s server doesn’t keep your recordings or their text, unless you turn on Help improve Redmic, which is off until you do. Your history of transcripts and recordings stays on your phone.</p>
+      </li>
+    </ul>
+    <p class="privacy__note">Speech is turned into text by Soniox or OpenAI, and Anthropic tidies the text. None of them trains its models on your recordings or text.<sup><a href="#fn7" aria-label="Footnote 7">7</a></sup> Redmic’s server is in the EU, in Frankfurt. You can delete your account any time. <a href="privacy/">Read the Privacy Policy <span aria-hidden="true">›</span></a></p>
+  </div>
+</section>
+
+<!-- 12. Pricing. -->
+<section class="pricing" id="pricing" data-tone="light">
+  <div class="wrap">
+    <div class="head">
+      <h2>Free to start.</h2>
+      <p class="lead">New to Redmic? You start with a 14-day trial of Pro, once per phone. No payment details.</p>
+    </div>
+    <table class="plans">
+      <thead>
+        <tr><th scope="col"><span class="sr">What you get</span></th><th scope="col">Free</th><th scope="col" class="plans__pro">Pro</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Words</th><td>1,000 a week<sup><a href="#fn3" aria-label="Footnote 3">3</a></sup></td><td>No weekly limit</td></tr>
+        <tr><th scope="row">Four styles</th><td>Included</td><td>Included</td></tr>
+        <tr><th scope="row">Translate</th><td>Included</td><td>Included</td></tr>
+        <tr><th scope="row">Dictionary, Snippets, Notes</th><td>Included</td><td>Included</td></tr>
+        <tr><th scope="row">Redmic chat</th><td><span class="sr">Not included</span><span aria-hidden="true">–</span></td><td>Included</td></tr>
+        <tr><th scope="row">Redmic AI</th><td><span class="sr">Not included</span><span aria-hidden="true">–</span></td><td>Included, with a daily limit</td></tr>
+        <tr><th scope="row">Price</th><td>$0</td><td><span class="nowrap">$9.99 a month</span> or <span class="nowrap">$79.99 a year</span><sup><a href="#fn4" aria-label="Footnote 4">4</a></sup></td></tr>
+      </tbody>
+    </table>
+    <p class="caption center">Redmic is an independent app. Pro keeps it going.</p>
+  </div>
+</section>
+
+<!-- 13. Questions. -->
+<section class="faq" id="faq" data-tone="light">
+  <div class="wrap wrap--narrow">
+    <h2>Questions.</h2>
+    <details>
+      <summary>How do I set it up?</summary>
+      <p><b>iPhone.</b> Open Redmic and follow the setup. In Settings › Apps › Redmic › Keyboards, turn on Redmic and Allow Full Access. Then, in any app, touch and hold the globe key and choose Redmic.</p>
+      <p><b>Android.</b> Open Redmic and follow the setup. Turn on Redmic in the list of keyboards, then switch to it.</p>
+    </details>
+    <details>
+      <summary>Why does it need Full Access on iPhone?</summary>
+      <p>So the keyboard can pass your dictation to the Redmic app, or send it to Redmic’s server itself. Redmic doesn’t record or send what you type.</p>
+    </details>
+    <details>
+      <summary>Does Redmic open when I tap the mic?</summary>
+      <p>Usually not. The keyboard listens by itself. On iPhone it opens Redmic only when it needs the app, for example right after an update, and then takes you back to your app (from Safari, you swipe back yourself).</p>
+    </details>
+    <details>
+      <summary>Is it really free?</summary>
+      <p>Yes, to start. You get a 14-day trial of Pro, then 1,000 words a week. The four styles, Translate, Dictionary, Snippets and Notes stay free. Pro removes the weekly limit and adds Redmic chat and Redmic AI.</p>
+    </details>
+    <details>
+      <summary>Where do my words go?</summary>
+      <p>Your history of transcripts and recordings stays on your phone. To write your text, a recording goes to a speech service and its text to an AI service. Neither trains on them, and Redmic asks before the first one. If you turn on Help improve Redmic, Redmic’s server also keeps a copy of your recordings, to train Redmic’s own speech recognition, until you turn it off or delete your account. The <a href="privacy/">Privacy Policy</a> has the details.</p>
+    </details>
+    <details>
+      <summary>What if I have no internet?</summary>
+      <p>On iPhone, tap the mic anyway: Redmic opens and writes your words with the phone’s own speech recognition.<sup><a href="#fn2" aria-label="Footnote 2">2</a></sup> It is a fallback, without the tidying.</p>
+    </details>
+    <p class="caption">More help on the <a href="support/">Support page</a>.</p>
+  </div>
+</section>
+
+<section class="notes" aria-label="Footnotes" data-tone="light">
+  <ol class="wrap">
+    <li id="fn1">Redmic recognises speech in 65 languages and can write, or translate into, 91.</li>
+    <li id="fn2">The offline fallback is on iPhone, for up to three of the languages you dictate in, once Redmic has downloaded their speech models (it does that on Wi-Fi).</li>
+    <li id="fn3">The free plan gives 1,000 words a week after the 14-day trial of Pro. One trial per phone. Accounts on the same phone share its free words.</li>
+    <li id="fn4">US prices; they may differ where you live. Pro is billed by Apple or Google and renews automatically until you cancel. Cancel on iPhone in Settings › Apple Account › Subscriptions, at least 24 hours before the period ends; on Android in Google Play › Payments &amp; subscriptions › Subscriptions.</li>
+    <li id="fn5">The four outputs shown are the sample on the app’s Style screen. The opening message, the Spanish sentence in the Translate section and the Redmic chat draft are examples too. Your results will vary.</li>
+    <li id="fn6">Walkie-Talkie is off by default. On iPhone it can’t press Send in chat apps such as WhatsApp, Telegram and Messages: the text goes in and you tap Send.</li>
+    <li id="fn7">OpenAI and Anthropic may keep data for a limited time to detect abuse (OpenAI for up to 30 days). Details are in the <a href="privacy/">Privacy Policy</a>.</li>
+  </ol>
+</section>
+
 </main>
-<footer class="site">
-<nav><a href="./support/">Support</a><a href="./privacy/">Privacy Policy</a><a href="./terms/">Terms of Use</a></nav>
-<p>© 2026 OKNENOR L.L.C-FZ</p>
+
+<!-- 14. The close. -->
+<footer class="final" id="get" data-tone="dark">
+  <div class="final__plate" aria-hidden="true"></div>
+  <div class="final__inner">
+    <div class="final__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="live" cx="12" cy="12" r="4.2"/></svg></div>
+    <h2>Stop typing. <span class="nowrap">Just talk.</span></h2>
+    <p class="lead">Free on the App Store and Google Play.</p>
+    <div class="stores">
+      <a class="store" href="https://apps.apple.com/app/id6829429992"><img src="assets/badges/app-store.svg?v=2f2fe1cb" width="144" height="48" alt="Download on the App Store" loading="lazy"></a>
+      <a class="store" href="https://play.google.com/store/apps/details?id=com.antonmironenko.redmic"><img src="assets/badges/google-play.png?v=454035a4" width="161" height="48" alt="Get it on Google Play" loading="lazy"></a>
+    </div>
+  </div>
+  <div class="final__foot">
+    <nav aria-label="Redmic"><a href="support/">Support</a><a href="privacy/">Privacy Policy</a><a href="terms/">Terms of Use</a></nav>
+    <p>© 2026 OKNENOR L.L.C-FZ</p>
+    <p class="final__marks">Apple, the Apple logo and iPhone are trademarks of Apple Inc., registered in the U.S. and other countries and regions. App Store is a service mark of Apple Inc. Google Play and the Google Play logo are trademarks of Google LLC. Android is a trademark of Google LLC.</p>
+  </div>
 </footer>
+
+<a class="button getbar" href="#get" data-get hidden>Get Redmic</a>
 </body>
 </html>

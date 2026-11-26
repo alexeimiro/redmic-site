@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /open/
+Disallow: /score/
+Disallow: /unsubscribe/
+
+Sitemap: https://redmic.ai/sitemap.xml
