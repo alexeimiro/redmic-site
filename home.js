@@ -384,6 +384,7 @@
     // A row takes the keyboard's focus only while it is one that scrolls.
     for (const row of rows) if (scrolls(row)) row.setAttribute("tabindex", "0"); else row.removeAttribute("tabindex");
     deckIsRow = !!deck && scrolls(deck);
+    measureSpots();
     measuredPage = root.scrollHeight;
   }
 
@@ -394,6 +395,7 @@
     queued = false;
     const y = scrollY;
     const screen = innerHeight;
+    shownY = y;
     if (scrub) {
       for (const scene of scenes) {
         if (!scene.pinned) continue;
@@ -430,6 +432,40 @@
   }
   const queue = () => { if (!queued) { queued = true; requestAnimationFrame(draw); } };
 
+  // ── Keeping the reader's place ──────────────────────────────────────────────────────────────
+  // When the layout is measured again (a window resized, a phone turned, Safari settling its bars
+  // just after it opens a link from another app, the scenes getting their length when this script
+  // starts), the sections above change height and the same scroll position would show something
+  // else. So: what was at the top of the screen before (from the measures and the position last
+  // drawn, since by now the browser has laid the page out anew) is brought back there after.
+  const spots = [...document.querySelectorAll("main > section, main > div, footer")].map((el) => ({ el, top: 0, height: 0 }));
+  let shownY = 0; // the scroll position last drawn
+  function measureSpots() {
+    const pageTop = scrollY;
+    for (const spot of spots) {
+      const box = spot.el.getBoundingClientRect();
+      spot.top = box.top + pageTop;
+      spot.height = box.height;
+    }
+  }
+  function place() {
+    const y = shownY;
+    if (y <= 0) return null;
+    for (const scene of scenes) {
+      const range = scene.height - scene.stageHeight;
+      if (scene.pinned && y >= scene.top && y <= scene.top + range) return { scene, p: (y - scene.top) / Math.max(1, range) };
+    }
+    const line = y + (h ? h.navHeight : 52);
+    const spot = spots.find((each) => each.top <= line && each.top + each.height > line);
+    return spot ? { spot, share: (line - spot.top) / Math.max(1, spot.height) } : null;
+  }
+  function goBack(to) {
+    if (!to) return;
+    const y = to.scene ? to.scene.top + (to.scene.pinned ? to.p * (to.scene.height - to.scene.stageHeight) : 0)
+      : to.spot.top + to.share * to.spot.height - (h ? h.navHeight : 52);
+    if (Math.abs(y - scrollY) > 1) { scrollTo(0, y); draw(); }
+  }
+
   // ── Starting, and starting again when the screen changes ────────────────────────────────────
   const heroParts = () => [h.copy, h.badges, h.say, h.claim, h.tilt, h.glare, h.shadow, h.curtain];
   const keyboardParts = () => [k.tilt, k.rows, k.bar, k.mic, k.rings]; // these keep the styles the build gave them
@@ -451,9 +487,13 @@
     draw();
   }
   function setUp() {
+    // The first time, the page is as the stylesheet alone laid it out, and where the browser put it (a link to a section).
+    if (measuredWidth < 0) { measureSpots(); shownY = scrollY; }
+    const was = place();
     cramped = false;
     turn(wantsScenes());
     if (scrub && !h.fits) { cramped = true; turn(false); }
+    goBack(was);
     root.classList.add("ready"); // the opening's phone has its place now (home.css shows it from here on)
   }
 
