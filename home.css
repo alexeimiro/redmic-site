@@ -307,8 +307,8 @@ html:not(.scrub) .rings { display: none; }
 /* The opening is pinned wherever the scenes are on. The page's head sets .scrub before the first
    paint, so its length is here too (the same numbers as data-len on the section, which home.js
    reads); home.js gives the other two scenes theirs (--len), where their stage has room for them. */
-.scrub .hero { height: 360svh; }
-@media (min-width: 900px) { .scrub .hero { height: 440svh; } }
+.scrub .hero { height: calc(360svh + (100lvh - 100svh)); padding-bottom: calc(100lvh - 100svh); } /* the padding: see the strip under the stage, below */
+@media (min-width: 900px) { .scrub .hero { height: calc(440svh + (100lvh - 100svh)); } }
 .scrub .scene[style*="--len"] { height: calc(var(--len) * 1svh); }
 .scrub .hero > .stage, .scrub .scene[style*="--len"] > .stage {
   position: sticky; top: 0; height: 100svh; overflow: clip;
@@ -354,10 +354,27 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
 .say__line { font-size: clamp(1.125rem, 2.2vw, 1.5rem); line-height: 1.3; letter-spacing: -0.012em; }
 .hero__writes { font-size: clamp(1.125rem, 2.2vw, 1.5rem); line-height: 1.3; letter-spacing: -0.012em; }
 .hero__writes .tag { display: block; margin: 10px 0 8px; }
+html:not(.scrub) .hero__say .tag { color: var(--faint); } /* here the two labels sit on the red glow */
 .hero__steps, .hero__curtain { display: none; }
 
 /* With them: everything sits in one screen-high stage and takes its turn. */
 .scrub .hero .stage { display: block; padding: 0; }
+.scrub .hero h1 { font-size: clamp(2.75rem, min(10.5vw, 13svh), 6rem); } /* in a low, wide window the headline stays on one line, so the words fit above the phone */
+/* A phone's browser bars slide away as the page scrolls, and the screen is then taller than the
+   stage (100svh) by 100lvh - 100svh. The strip under the stage carries on what the stage shows at
+   its lower edge: the red glow while the opening is black, white once it has turned (home.js marks
+   that with .is-white). It sticks under the stage for as long as the stage is pinned (its negative
+   margin lets it lie in the section's padding, which is the strip's room when the stage lets go).
+   Where the stage fills the screen, all of this has no height. */
+.scrub .hero::after {
+  content: ""; display: block; position: sticky; top: 100svh; pointer-events: none;
+  height: calc(100lvh - 100svh); margin-bottom: calc(100svh - 100lvh);
+  background:
+    radial-gradient(60vw 46svh at 50% 0, rgba(255, 82, 71, 0.3), rgba(255, 82, 71, 0) 70%),
+    radial-gradient(34vw 26svh at 50% -4svh, rgba(255, 82, 71, 0.34), rgba(255, 82, 71, 0) 72%);
+}
+.scrub .hero.is-white, .scrub .hero.is-white::after { background: var(--canvas); }
+.scrub body[data-slots~="hero-plate-wide"] .hero:not(.is-white)::after { opacity: 0.35; }
 /* The layers that lie over the words (the phone's box, the lines still to come) let a click through to the badges. */
 .scrub .hero__device, .scrub .hero__claim, .scrub .hero__say, .scrub .hero__steps { pointer-events: none; }
 /* The phone shows once home.js has put it in its place. */
@@ -449,7 +466,7 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
    still there (no empty screen after the turn), and shows once the white has covered the stage. */
 .scrub .statement { margin-top: -52svh; background: none; z-index: 6; }
 .scrub .statement__text { opacity: 0; transition: opacity 0.25s; }
-.scrub[data-nav="light"] .statement__text { opacity: 1; }
+.scrub .hero.is-white ~ .statement .statement__text { opacity: 1; } /* home.js marks the opening once the white fills its stage */
 .scrub .statement__text .sw { color: var(--faint); transition: color 0.3s; }
 .scrub .statement__text .sw.on { color: var(--ink); }
 
@@ -504,7 +521,7 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
 .modes__body { max-width: var(--wide); margin: 0 auto; display: grid; gap: 20px; }
 .spoken { margin: 0 var(--gutter); padding: 20px 22px; border-radius: 22px; background: var(--fill); }
 .spoken blockquote { margin-top: 6px; font-size: clamp(1.0625rem, 1.8vw, 1.375rem); line-height: 1.35; letter-spacing: -0.012em; color: var(--second); }
-.modes__tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px var(--gutter); }
+.modes__tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 8px var(--gutter); margin: -6px 0; } /* a row that scrolls clips: the padding is room for a button's focus ring */
 .modes__tabs::-webkit-scrollbar { display: none; }
 .modes__tabs .chip { flex: none; }
 @media (max-width: 430px), (min-width: 900px) and (max-width: 1099px) {
@@ -534,7 +551,7 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
 @media (min-width: 900px) {
   .modes__body { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-rows: auto auto auto 1fr; column-gap: clamp(32px, 5vw, 72px); padding: 0 var(--gutter); align-items: start; }
   .spoken { grid-column: 1; margin: 0; padding: 24px 26px; }
-  .modes__tabs { grid-column: 1; padding: 2px 0; flex-wrap: wrap; }
+  .modes__tabs { grid-column: 1; padding: 2px 0; margin: 0; overflow: visible; flex-wrap: wrap; }
   .modes .caption { grid-column: 1; padding: 0; max-width: 26em; }
   .modes__menu { grid-column: 1; padding: 6px 0 0; max-width: 340px; }
 
@@ -560,7 +577,10 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
   html:not(.js) .deck__card { grid-area: auto; transform: none; opacity: 1; min-height: 0; background: var(--ink); }
   html:not(.js) .deck__card > * { opacity: 1; }
   /* Pinned (home.js gives the section its length only where the stage holds all of this). */
-  .scrub .modes[style*="--len"] .stage { display: grid; align-content: center; padding: var(--nav-h) 0 0; }
+  /* The stage is a grid whether pinned or not: home.js pins it for a moment to see if it fits, and
+     Chrome counts a block turning into a grid and back as a layout shift, though nothing is drawn. */
+  .scrub .modes .stage { display: grid; }
+  .scrub .modes[style*="--len"] .stage { align-content: center; padding: var(--nav-h) 0 0; }
   .scrub .modes[style*="--len"] .modes__head { margin-bottom: calc(clamp(12px, 3svh, 48px) + 28px); } /* the pile's back cards stand 27 px above it */
   @media (max-height: 859px) { .scrub .modes[style*="--len"] .modes__menu { display: none; } } /* no room for it in a pinned stage this low */
 }
@@ -741,6 +761,7 @@ html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
   .plans th, .plans td { padding-left: 8px; padding-right: 8px; }
   .plans td:last-child, .plans thead th:last-child { padding-left: 12px; padding-right: 12px; }
 }
+@media (max-width: 18.5em) { .plans .nowrap { white-space: normal; } } /* very large text on a phone: the prices may wrap */
 @media (min-width: 620px) { .plans { font-size: 1.0625rem; } .plans th, .plans td { padding: 16px 22px; } .plans td:last-child, .plans thead th:last-child { padding-left: 26px; padding-right: 26px; } }
 
 /* ── 13. Questions ────────────────────────────────────────────────────────────────────────────── */

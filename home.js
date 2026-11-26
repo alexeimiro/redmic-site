@@ -45,6 +45,8 @@
     if (printing || cramped || query.has("plain") || lessMotion.matches) return false;
     if (!window.CSS || !CSS.supports("height", "100svh") || !CSS.supports("transform-style", "preserve-3d")) return false;
     if (navigator.connection && navigator.connection.saveData) return false;
+    // Text set much larger than usual needs more room than a stage one screen high has.
+    if (parseFloat(getComputedStyle(root).fontSize) > 20) return false;
     // Too narrow, or a phone on its side: a pinned stage has no room there.
     return innerWidth >= 340 && screenHeight() >= 520;
   }
@@ -239,6 +241,9 @@
       h.curtain.style.opacity = span(turn, 0, 0.16).toFixed(3);
       heroTone = box.top * (1 - grow) < h.navHeight ? "light" : "dark";
     }
+    // Once the white reaches the stage's edges, the strip under it (a phone with its bars away) is
+    // white too, and the statement that has come up over the stage's lower half shows.
+    hero.el.classList.toggle("is-white", turn > 0 && easeInOut(turn) > 0.995);
   }
 
   // The rings follow a voice, so they run on a clock, but only while the mic is "open" on screen.
@@ -293,7 +298,9 @@
     const apart = easeOut(span(p, 0.2, 0.6));
     const settle = easeInOut(span(p, 0.64, 0.86));
     k.tilt.style.transform = `rotateX(${mix(mix(0, 54, lean), 26, settle).toFixed(2)}deg) rotateZ(${mix(mix(0, -24, lean), -10, settle).toFixed(2)}deg)`;
-    const lift = (layer, height) => { layer.style.transform = `translate3d(0,0,${(height * apart).toFixed(1)}px)`; };
+    // The lifts are for a keyboard 520 px wide; a smaller one (a low window) lifts its layers less.
+    const unit = (k.tilt.offsetWidth || 520) / 520;
+    const lift = (layer, height) => { layer.style.transform = `translate3d(0,0,${(height * unit * apart).toFixed(1)}px)`; };
     lift(k.rows, 0); lift(k.bar, 56); lift(k.mic, 120); lift(k.rings, 120);
     const told = Math.ceil(span(p, 0.2, 0.8) * k.callouts.length);
     k.callouts.forEach((line, index) => line.classList.toggle("on", index < told));
@@ -353,7 +360,8 @@
     for (const scene of scenes) {
       const length = scrub ? scene.lengths[wide ? 0 : 1] : 0;
       scene.pinned = length > 0;
-      if (scene.pinned) scene.el.style.setProperty("--len", String(length)); else scene.el.style.removeProperty("--len");
+      // The opening's length is in the stylesheet (it is there before this script is); the other two get theirs here.
+      if (scene.pinned && scene !== hero) scene.el.style.setProperty("--len", String(length)); else scene.el.style.removeProperty("--len");
       scene.near = null;
       scene.p = -1;
     }
@@ -367,7 +375,8 @@
     const pageTop = scrollY;
     for (const scene of scenes) {
       scene.top = scene.el.getBoundingClientRect().top + pageTop;
-      scene.height = scene.el.offsetHeight;
+      // Without the padding under the opening (the room for the strip a phone shows under the stage).
+      scene.height = scene.el.offsetHeight - (parseFloat(getComputedStyle(scene.el).paddingBottom) || 0);
       scene.stageHeight = scene.stage.offsetHeight;
     }
     measuredScreen = screenHeight();
@@ -480,6 +489,7 @@
         h.screen.dataset.frame = "0";
         heroFrame = -1; heroStep = -1; shownMode = -1;
         delete hero.stage.dataset.step;
+        hero.el.classList.remove("is-white");
         showMode(0);
       }
     }
