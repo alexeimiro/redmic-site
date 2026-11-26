@@ -1,0 +1,16 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.antonmironenko.redmic",
+      "sha256_cert_fingerprints": [
+        "48:CE:2F:0C:9D:C7:53:D7:58:89:67:3C:71:CD:18:1B:42:8C:12:15:41:01:72:91:ED:16:35:F1:A1:85:82:B9",
+        "36:82:C2:7C:2A:2B:86:34:F4:5A:BE:C0:B7:32:FA:D6:88:C5:0E:75:5F:1A:AA:AD:C6:46:3E:79:B2:BB:5E:0C",
+        "AC:5A:9C:BC:8F:3E:CF:20:7D:07:6E:44:61:B2:70:E4:65:90:44:0B:F7:9E:6E:E4:6C:BA:31:FA:D4:CE:EA:95"
+      ]
+    }
+  }
+]
