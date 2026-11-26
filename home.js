@@ -75,10 +75,10 @@ const h = hero && {
 copy: part(hero.el, "copy"), badges: hero.el.querySelector(".hero__copy .stores"), say: part(hero.el, "say"), claim: part(hero.el, "claim"),
 device: part(hero.el, "device"), tilt: part(hero.el, "tilt"), screen: part(hero.el, "screen"),
 rings: [...part(hero.el, "rings").children], field: part(hero.el, "field"), mic: part(hero.el, "mic"),
-curtain: part(hero.el, "curtain"), glare: part(hero.el, "glare"),
+curtain: part(hero.el, "curtain"), glare: part(hero.el, "glare"), fade: part(hero.el, "fade"),
 shadow: part(hero.el, "shadow"),
 words: [...hero.el.querySelectorAll(".say__line .w")], fillers: [...hero.el.querySelectorAll(".w--filler")],
-restY: 0, demoY: 0, claimY: 0, claimScale: 1, fieldBox: null, navHeight: 52, point: { x: 0, y: 0, tx: 0, ty: 0 },
+restY: 0, demoY: 0, claimY: 0, claimScale: 1, phoneHeight: 0, fieldBox: null, navHeight: 52, point: { x: 0, y: 0, tx: 0, ty: 0 },
 fits: true,
 };
 if (h) {
@@ -96,7 +96,7 @@ const phoneTransform = (y, tiltX, tiltY, scale) =>
 function measureHero() {
 const stageBox = hero.stage.getBoundingClientRect();
 const stageHeight = hero.stageHeight;
-const phoneHeight = h.device.offsetHeight;
+const phoneHeight = h.phoneHeight = h.device.offsetHeight;
 const wide = innerWidth >= WIDE;
 h.navHeight = parseFloat(getComputedStyle(root).getPropertyValue("--nav-h")) || 52;
 h.copy.style.transform = "";
@@ -140,7 +140,27 @@ const step = easeInOut(span(p, 0.72, 0.82));
 const y = mix(mix(h.restY, h.demoY, rise), h.claimY, step);
 const scale = mix(mix(0.92, 1, rise), h.claimScale, step);
 const lean = 1 - rise; // the pointer tilts it less and less as it stands up
-h.tilt.style.transform = phoneTransform(y, mix(58, 0, rise) + h.point.y * lean, mix(-12, 0, rise) + h.point.x * lean, scale);
+const back = mix(58, 0, rise);
+const side = mix(-12, 0, rise);
+h.tilt.style.transform = phoneTransform(y, back + h.point.y * lean, side + h.point.x * lean, scale);
+let below = -100; // (standing: no fade)
+if (rise < 1) {
+const halfTall = (h.phoneHeight * scale) / 2;
+const halfWide = halfTall / 2.092;
+const a = (back * Math.PI) / 180;
+const b = (side * Math.PI) / 180;
+let lowest = -Infinity;
+for (const x of [-halfWide, halfWide]) {
+for (const z of [-halfWide * 0.085, halfWide * 0.085]) {
+const behind = -x * Math.sin(b) + z * Math.cos(b); // toward the reader, once turned
+const down = halfTall * Math.cos(a) - behind * Math.sin(a);
+const near = halfTall * Math.sin(a) + behind * Math.cos(a);
+lowest = Math.max(lowest, ((y + down) * 1500) / (1500 - near));
+}
+}
+below = stageHeight / 2 + lowest - stageHeight;
+}
+h.fade.style.opacity = clamp((below + 2) / 8).toFixed(3);
 h.glare.style.transform = `translate3d(${mix(-14, 14, rise).toFixed(2)}%,0,0)`;
 h.shadow.style.opacity = (1 - rise * 0.55).toFixed(3);
 const frame = p < 0.36 ? 0 : p < 0.68 ? 1 : 2;
@@ -374,7 +394,7 @@ const y = to.scene ? to.scene.top + (to.scene.pinned ? to.p * (to.scene.height -
 : to.spot.top + to.share * to.spot.height - (h ? h.navHeight : 52);
 if (Math.abs(y - scrollY) > 1) { scrollTo(0, y); draw(); }
 }
-const heroParts = () => [h.copy, h.badges, h.say, h.claim, h.tilt, h.glare, h.shadow, h.curtain];
+const heroParts = () => [h.copy, h.badges, h.say, h.claim, h.tilt, h.glare, h.shadow, h.curtain, h.fade];
 const keyboardParts = () => [k.tilt, k.rows, k.bar, k.mic, k.rings]; // these keep the styles the build gave them
 function turn(on) {
 root.classList.toggle("scrub", on); // the page's head may have set it before this script arrived
