@@ -33,13 +33,20 @@
   const part = (scope, name) => scope.querySelector(`[data-part="${name}"]`);
   const WIDE = 900; // from this width the page has room for side-by-side scenes
 
+  // A screen's height as the stages have it: 100svh, the height with the browser's bars showing. It
+  // doesn't change when a phone's bars slide away, as innerHeight does.
+  const probe = document.createElement("div");
+  probe.style.cssText = "position:fixed;top:0;left:0;width:0;height:100svh;visibility:hidden;pointer-events:none";
+  document.body.append(probe);
+  const screenHeight = () => probe.offsetHeight || innerHeight;
+
   /** Whether this browser, on this screen, gets the scroll scenes. (The page's head has the same test.) */
   function wantsScenes() {
     if (printing || cramped || query.has("plain") || lessMotion.matches) return false;
     if (!window.CSS || !CSS.supports("height", "100svh") || !CSS.supports("transform-style", "preserve-3d")) return false;
     if (navigator.connection && navigator.connection.saveData) return false;
     // Too narrow, or a phone on its side: a pinned stage has no room there.
-    return innerWidth >= 340 && innerHeight >= 520;
+    return innerWidth >= 340 && screenHeight() >= 520;
   }
 
   // ── Where the stores are ────────────────────────────────────────────────────────────────────
@@ -330,7 +337,7 @@
 
   // ── Measuring ───────────────────────────────────────────────────────────────────────────────
   let measuredWidth = -1;
-  let measuredStage = -1; // a screen's height as the stages have it (100svh)
+  let measuredScreen = -1; // a screen's height as the stages have it (100svh)
   let measuredPage = -1; // the whole page's height
 
   /** Whether a stage one screen high holds everything in it (a low window, or large text, may not). */
@@ -363,7 +370,7 @@
       scene.height = scene.el.offsetHeight;
       scene.stageHeight = scene.stage.offsetHeight;
     }
-    measuredStage = scrub && hero ? hero.stageHeight : -1;
+    measuredScreen = screenHeight();
     if (scrub && hero.pinned) measureHero();
     if (keyboard && !keyboard.pinned) for (const el of [k.tilt, k.rows, k.bar, k.mic, k.rings]) el.style.transform = "";
     for (const view of views) {
@@ -518,9 +525,8 @@
   addEventListener("scroll", queue, { passive: true });
   addEventListener("resize", () => {
     // A phone's browser bars sliding away change the window's height, but not the stages' (100svh):
-    // nothing to measure again. A window made taller or lower does change them.
-    const stageNow = scrub && hero ? hero.stage.offsetHeight : -1;
-    if (innerWidth !== measuredWidth || stageNow !== measuredStage || wantsScenes() !== scrub) setUp(); else queue();
+    // nothing to measure or decide again. A window made taller or lower does change them.
+    if (innerWidth !== measuredWidth || screenHeight() !== measuredScreen) setUp(); else queue();
   });
   addEventListener("load", setUp);
   lessMotion.addEventListener("change", setUp);

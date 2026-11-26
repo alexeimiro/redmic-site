@@ -527,7 +527,9 @@ body[data-slots~="hero-plate-wide"] .hero__glow { opacity: 0.35; }
 .modes .caption { padding: 0 var(--gutter); }
 /* The keyboard's own style menu, cut out of a capture. */
 .modes__menu { display: grid; gap: 10px; padding: 8px var(--gutter) 0; max-width: 460px; }
-.slice { display: block; width: 100%; border-radius: 20px; background-repeat: no-repeat; box-shadow: 0 0 0 1px var(--line); }
+/* A part of a screen: the element clips a picture of the whole screen (the build lays it so that the part fills the element). */
+.slice { display: block; position: relative; overflow: hidden; width: 100%; border-radius: 20px; box-shadow: 0 0 0 1px var(--line); }
+.slice > img, .layer > img { position: absolute; max-width: none; height: auto; }
 
 @media (min-width: 900px) {
   .modes__body { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-rows: auto auto auto 1fr; column-gap: clamp(32px, 5vw, 72px); padding: 0 var(--gutter); align-items: start; }
@@ -630,7 +632,8 @@ html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
 /* The keyboard as the capture has it: its rows, its bar, and on top the mic while it listens. */
 .exploded { width: 100%; max-width: 520px; margin: 0 auto; }
 .exploded__tilt { position: relative; border-radius: 18px; }
-.layer { display: block; position: absolute; background-repeat: no-repeat; }
+.layer { display: block; position: absolute; }
+.layer--rows, .layer--bar, .layer--mic { overflow: hidden; } /* not the rings: they stand out past their box */
 .layer--bar { border-radius: 18px 18px 0 0; }
 .layer--rows { border-radius: 0 0 18px 18px; }
 .layer--mic { border-radius: 999px; }
