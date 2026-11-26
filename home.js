@@ -76,6 +76,9 @@
       card.style.setProperty("--d", Math.max(0, each - index));
     });
     chips.forEach((chip, each) => chip.setAttribute("aria-pressed", String(each === index)));
+    // On a very narrow phone the four buttons don't fit their row: the pressed one is brought into view.
+    const tabs = chips[index] && chips[index].parentElement;
+    if (tabs && tabs.scrollWidth > tabs.clientWidth) tabs.scrollLeft = index === 0 ? 0 : Math.max(0, chips[index].offsetLeft + chips[index].offsetWidth + 20 - tabs.clientWidth);
   }
 
   // ── The echo rings ──────────────────────────────────────────────────────────────────────────
@@ -153,9 +156,13 @@
     // For the demo it stands in the middle (wide), or low enough to leave the line above it (narrow).
     h.demoY = wide ? h.navHeight / 2 : Math.max(h.navHeight / 2, stageHeight / 2 - phoneHeight / 2 - 14);
     // For the claim it steps down, so the two lines fit above it.
-    h.claimScale = wide ? 0.94 : 1;
     const claimBottom = h.claim.offsetTop + h.claim.offsetHeight;
-    h.claimY = Math.max(h.demoY, claimBottom + clamp(stageHeight * 0.03, 16, 36) + (phoneHeight * h.claimScale) / 2 - stageHeight / 2);
+    const gap = clamp(stageHeight * 0.03, 16, 36);
+    // On a narrow screen it is also made a little smaller, so that it ends above the stage's lower
+    // edge: some phones show the page further down than the stage reaches, and a phone cut off there
+    // would be seen cut.
+    h.claimScale = wide ? 0.94 : clamp((stageHeight - claimBottom - gap - 14) / phoneHeight, 0.6, 1);
+    h.claimY = Math.max(h.demoY, claimBottom + gap + (phoneHeight * h.claimScale) / 2 - stageHeight / 2);
 
     // Where the "um" and "uh" fly to: the mic key, with the phone standing for the demo.
     h.tilt.style.transform = phoneTransform(h.demoY, 0, 0, 1);
@@ -558,6 +565,9 @@
         if (!entry.isIntersecting) continue;
         entry.target.classList.add("in");
         arrive.unobserve(entry.target);
+        // A row that scrolls sideways comes in as one, or its next card would be missing during the first swipe.
+        const row = entry.target.closest(".short__row");
+        if (row) for (const each of row.children) { each.classList.add("in"); arrive.unobserve(each); }
       }
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
     for (const el of document.querySelectorAll("[data-reveal]")) {
@@ -592,8 +602,9 @@
     if (keyboard && keyboard.seen) runKeyboardRings();
   });
   // Paper gets the plain page: every section in the flow, finished.
-  addEventListener("beforeprint", () => { printing = true; setUp(); });
-  addEventListener("afterprint", () => { printing = false; setUp(); });
+  let placeBeforePrint = null;
+  addEventListener("beforeprint", () => { placeBeforePrint = place(); printing = true; setUp(); });
+  addEventListener("afterprint", () => { printing = false; setUp(); goBack(placeBeforePrint); placeBeforePrint = null; });
   if (matchMedia("(hover: hover) and (pointer: fine)").matches && hero) hero.stage.addEventListener("pointermove", followPointer);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(setUp);
   setUp();

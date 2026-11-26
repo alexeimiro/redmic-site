@@ -193,7 +193,7 @@ html:not(.js) .nav { position: absolute; }
 .getbar {
   position: fixed; z-index: 40; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   transform: translate3d(-50%, 150%, 0); opacity: 0;
-  min-height: 48px; padding: 8px 26px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  min-height: 48px; padding: 8px 26px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22), 0 10px 30px rgba(0, 0, 0, 0.22); /* the hairline keeps its shape over the black cards */
   transition: transform 0.45s var(--ease), opacity 0.3s;
 }
 .getbar.is-up { transform: translate3d(-50%, 0, 0); opacity: 1; }
@@ -313,6 +313,12 @@ html:not(.scrub) .rings { display: none; }
 .scrub .hero > .stage, .scrub .scene[style*="--len"] > .stage {
   position: sticky; top: 0; height: 100svh; overflow: clip;
 }
+/* Some phones show the page further down than the stage reaches (Safari under its floating bar, any
+   browser once its bars slide away). The opening's phone, lying at rest or rising, reaches past the
+   stage's lower edge: it is let through there, so it isn't seen cut. Once the white has filled the
+   stage the phone is gone, or its lower end would show under the white. */
+.scrub .hero > .stage { overflow: visible; overflow-x: clip; }
+.scrub .hero.is-white .hero__device, .scrub .hero.is-white .hero__plate { visibility: hidden; } /* (the plate too: WebKit ends the white a hair above the stage's edge, and a black line of the plate showed there) */
 
 /* ── 1–3. The opening ─────────────────────────────────────────────────────────────────────────── */
 
@@ -404,7 +410,7 @@ html:not(.scrub) .hero__say .tag { color: var(--faint); } /* here the two labels
 .scrub .hero__curtain .hero__claim { opacity: 1; }
 .scrub .hero__curtain .lead { color: var(--second); }
 .scrub .hero__curtain {
-  display: block; position: absolute; inset: 0; z-index: 5; visibility: hidden;
+  display: block; position: absolute; inset: 0 0 -1px; z-index: 5; visibility: hidden;
   background: var(--canvas); color: var(--ink);
 }
 .scrub .hero__writes { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -455,7 +461,11 @@ html:not(.scrub) .hero__say .tag { color: var(--faint); } /* here the two labels
   }
   .scrub .hero__steps li {
     inset: 0 auto 0 0; padding: 0; background: none; font-size: clamp(1.25rem, 1.9vw, 1.75rem); letter-spacing: -0.012em;
+    transition: opacity 0.12s, transform 0.3s var(--ease); /* without a pill behind them, two labels would show through each other */
   }
+  .scrub .hero .stage[data-step="1"] .hero__steps li:nth-child(1),
+  .scrub .hero .stage[data-step="2"] .hero__steps li:nth-child(2),
+  .scrub .hero .stage[data-step="3"] .hero__steps li:nth-child(3) { transition-delay: 0.12s; }
 }
 
 /* ── 4. The statement ─────────────────────────────────────────────────────────────────────────── */
@@ -467,7 +477,7 @@ html:not(.scrub) .hero__say .tag { color: var(--faint); } /* here the two labels
 }
 /* With the scenes, it comes up into the lower half of the white while the opening's last lines are
    still there (no empty screen after the turn), and shows once the white has covered the stage. */
-.scrub .statement { margin-top: -52svh; background: none; z-index: 6; }
+.scrub .statement { margin-top: -52svh; min-height: 52svh; background: none; z-index: 6; } /* at least as tall as its overlap: the next section never starts inside the stage */
 .scrub .statement__text { opacity: 0; transition: opacity 0.25s; }
 .scrub .hero.is-white ~ .statement .statement__text { opacity: 1; } /* home.js marks the opening once the white fills its stage */
 .scrub .statement__text .sw { color: var(--faint); transition: color 0.3s; }
@@ -507,6 +517,10 @@ body[data-slots*="icon-"] .card__icon { width: 72px; height: 72px; } /* a made i
 .card p { color: var(--second); text-wrap: pretty; }
 .card > a { margin-top: 4px; font-weight: 600; text-decoration: none; }
 .card > a:hover { text-decoration: underline; }
+@media (min-width: 620px) and (max-width: 899px) and (hover: hover) and (pointer: fine) {
+  /* A narrow window on a computer: three rows of two (a touch screen of this width keeps the row to swipe). */
+  .short__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; scroll-snap-type: none; padding: 4px var(--gutter) 12px; }
+}
 @media (min-width: 900px) {
   /* Room for all six: two rows of three, and nothing to scroll (a mouse wheel can't scroll a row sideways). */
   .short__row {
@@ -531,6 +545,10 @@ body[data-slots*="icon-"] .card__icon { width: 72px; height: 72px; } /* a made i
 @media (max-width: 430px), (min-width: 900px) and (max-width: 1099px) {
   .modes__tabs { gap: 6px; }
   .modes__tabs .chip { padding: 6px 10px; font-size: 0.875rem; }
+}
+@media (max-width: 339px) {
+  .modes__tabs { gap: 4px; }
+  .modes__tabs .chip { padding: 6px 8px; font-size: 0.8125rem; }
 }
 /* The four answers: a row to swipe on a phone, a pile to leaf through on a wide screen. */
 .deck {
@@ -584,7 +602,7 @@ body[data-slots*="icon-"] .card__icon { width: 72px; height: 72px; } /* a made i
   /* The stage is a grid whether pinned or not: home.js pins it for a moment to see if it fits, and
      Chrome counts a block turning into a grid and back as a layout shift, though nothing is drawn. */
   .scrub .modes .stage { display: grid; }
-  .scrub .modes[style*="--len"] .stage { align-content: center; padding: var(--nav-h) 0 0; }
+  .scrub .modes[style*="--len"] .stage { align-content: center; padding: calc(var(--nav-h) + 12px) 0 12px; }
   .scrub .modes[style*="--len"] .modes__head { margin-bottom: calc(clamp(12px, 3svh, 48px) + 28px); } /* the pile's back cards stand 27 px above it */
   @media (max-height: 859px) { .scrub .modes[style*="--len"] .modes__menu { display: none; } } /* no room for it in a pinned stage this low */
 }
@@ -685,6 +703,7 @@ html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
      together, the keyboard sized by the screen's height, its points and the last block lit in turn. */
   .scrub .keyboard[style*="--len"] .stage { align-content: center; padding: calc(var(--nav-h) + 8px) 0 16px; gap: clamp(12px, 3svh, 44px); }
   .scrub .keyboard[style*="--len"] .exploded { max-width: min(520px, 58svh); perspective: 1600px; margin-top: clamp(12px, 6svh, 72px); padding-bottom: 22px; }
+  @media (max-width: 1099px) { .scrub .keyboard[style*="--len"] .exploded { max-width: min(400px, 58svh); } } /* tilted, it overhangs its box: this keeps it off the window's edge */
   @media (max-height: 779px) { .scrub .keyboard[style*="--len"] .keyboard__more { gap: 8px; } }
   .scrub .keyboard[style*="--len"] .exploded__tilt { transform-style: preserve-3d; }
   .scrub .keyboard[style*="--len"] .layer { backface-visibility: hidden; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06); }
@@ -768,6 +787,7 @@ html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
   .plans td:last-child, .plans thead th:last-child { padding-left: 12px; padding-right: 12px; }
 }
 @media (max-width: 18.5em) { .plans .nowrap { white-space: normal; } } /* very large text on a phone: the prices may wrap */
+@media (max-width: 339px) { .plans { font-size: 0.875rem; } .plans thead th:nth-child(2) { width: 26%; } }
 @media (min-width: 620px) { .plans { font-size: 1.0625rem; } .plans th, .plans td { padding: 16px 22px; } .plans td:last-child, .plans thead th:last-child { padding-left: 26px; padding-right: 26px; } }
 
 /* ── 13. Questions ────────────────────────────────────────────────────────────────────────────── */
@@ -847,7 +867,13 @@ body[data-slots~="cta-plate-wide"] .final__foot nav a { color: var(--night-ink);
   .nav { position: absolute; }
   .skip, .getbar { display: none !important; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
-  .hero, .final, .deck__card, .plans td:last-child, .plans thead th:last-child, .flip__face--back { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .hero, .final, .nav, .button, .deck__card, .plans td:last-child, .plans thead th:last-child, .flip__face--back { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body, html[data-nav="dark"], html[data-nav="dark"] body { background: #fff; } /* or the gaps between sections print black */
+  /* Paper is as wide as a phone's layout: the rows that scroll there wrap here. */
+  .short__row, .deck { flex-wrap: wrap; overflow: visible; }
+  .card, .deck__card { flex: 1 1 40%; break-inside: avoid; }
+  .modes__tabs { display: none; }
+  .phone--flat .phone__front { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 calc(var(--bezel) * 0.4) #1b1b1e; } /* soft shadows print as grey boxes in some PDF viewers */
 }
 
 /* For the checks (scripts/site_check): time stands still, so a picture of a scroll position is
