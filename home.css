@@ -610,6 +610,12 @@ html:not(.js) .modes__tabs { display: none; } /* the buttons need the script */
 .trio { display: grid; gap: clamp(48px, 8vw, 72px) clamp(24px, 3vw, 40px); margin-bottom: 40px; }
 .trio__item { display: grid; justify-items: center; align-content: start; gap: 10px; text-align: center; }
 .trio__item .phone { --pw: min(62vw, 250px); margin-bottom: 18px; }
+/* Only as much of each phone as its screen has to show; the empty glass below fades out. */
+.trio__item .phone {
+  height: calc(var(--pw) * 1.52); overflow: hidden;
+  -webkit-mask-image: linear-gradient(#000 90%, transparent); mask-image: linear-gradient(#000 90%, transparent);
+}
+.trio__item .phone__front { inset: 0 0 auto 0; height: var(--ph); }
 .trio__item p { max-width: 20em; color: var(--second); }
 @media (min-width: 760px) {
   .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
